@@ -1,4 +1,4 @@
-package org.skalka.groupme4j.response;
+package org.skalka.groupme4j.response.group;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

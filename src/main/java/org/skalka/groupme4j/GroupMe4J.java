@@ -2,7 +2,7 @@ package org.skalka.groupme4j;
 
 import java.io.IOException;
 
-import org.skalka.groupme4j.response.GroupResponse;
+import org.skalka.groupme4j.response.group.GroupResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

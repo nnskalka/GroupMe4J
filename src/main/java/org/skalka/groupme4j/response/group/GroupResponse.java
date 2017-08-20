@@ -1,4 +1,4 @@
-package org.skalka.groupme4j.response;
+package org.skalka.groupme4j.response.group;
 
 import java.util.HashMap;
 import java.util.List;
