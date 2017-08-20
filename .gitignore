@@ -33,3 +33,13 @@ gradle-app.setting
 
 # Cache of project
 .gradletasknamecache
+
+# Project file for retaining access token outside of SVC
+access.token
+
+# Various IDE code
+.vscode
+.project
+/.nb-gradle/
+/.nb-gradle-properties
+/.properties
