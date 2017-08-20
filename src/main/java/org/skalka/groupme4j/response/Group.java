@@ -45,7 +45,7 @@ public class Group {
 	private List<Member> members = null;
 	
 	@JsonProperty("messages")
-	private Message previewMessage = null;
+	private GroupPreviewMessage previewMessage = null;
 	
 	@JsonProperty("max_members")
 	private int maxMembers;
@@ -154,11 +154,11 @@ public class Group {
 		this.members = members;
 	}
 
-	public Message getPreviewMessage() {
+	public GroupPreviewMessage getPreviewMessage() {
 		return previewMessage;
 	}
 
-	public void setPreviewMessage(Message previewMessage) {
+	public void setPreviewMessage(GroupPreviewMessage previewMessage) {
 		this.previewMessage = previewMessage;
 	}
 

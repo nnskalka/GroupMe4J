@@ -2,7 +2,7 @@ package org.skalka.groupme4j.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class GroupPreview {
+public class GroupPreviewMessage {
 	@JsonProperty("count")
 	private int count;
 	
