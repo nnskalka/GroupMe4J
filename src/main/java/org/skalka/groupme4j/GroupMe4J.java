@@ -32,7 +32,26 @@ public class GroupMe4J {
 			json = Unirest.get(BASE_URL + "/groups")
 			.queryString("token", token)
 			.queryString("page", (page != null) ? page : 1)
-			.queryString("per_page", (per_page != null) ? per_page : 10).asString().getBody();
+			.queryString("per_page", (per_page != null) ? per_page : 10)
+			.asString().getBody();
+			
+			gr = convertGroupResponseJsonString(json);
+		} catch (Exception E) {
+			LOGGER.error("There was an error retrieving information from GroupMe: {}", E.getMessage());
+			throw new GroupMeAPIException();
+		}
+		
+		return gr;
+	}
+	
+	public GroupResponse getFormerGroups() throws GroupMeAPIException {
+		String json = null;
+		GroupResponse gr = null;
+		
+		try {
+			json = Unirest.get(BASE_URL + "/groups/former")
+			.queryString("token", token)
+			.asString().getBody();
 			
 			gr = convertGroupResponseJsonString(json);
 		} catch (Exception E) {
