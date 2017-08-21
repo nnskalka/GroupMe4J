@@ -1,14 +1,15 @@
 package org.skalka.groupme4j;
 
-import java.io.IOException;
+import java.util.List;
 
-import org.skalka.groupme4j.response.group.GroupResponse;
+import org.skalka.groupme4j.converter.MultipleEntryConverter;
+import org.skalka.groupme4j.converter.SingleEntryConverter;
+import org.skalka.groupme4j.exception.GroupMeAPIException;
+import org.skalka.groupme4j.response.group.Group;
+import org.skalka.groupme4j.response.group.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.Unirest;
 
 public class GroupMe4J {
@@ -24,47 +25,62 @@ public class GroupMe4J {
 		return this.token;
 	}
 	
-	public GroupResponse getGroups(Integer page, Integer per_page) throws GroupMeAPIException {
-		String json = null;
-		GroupResponse gr = null;
+	public List<Group> getGroups(Integer page, Integer per_page) throws GroupMeAPIException {
+		Response<List<Group>> response = null;
 		
 		try {
-			json = Unirest.get(BASE_URL + "/groups")
+			LOGGER.debug("Connecting to: '{}'", BASE_URL + "/groups");
+			String json = Unirest.get(BASE_URL + "/groups")
 			.queryString("token", token)
 			.queryString("page", (page != null) ? page : 1)
 			.queryString("per_page", (per_page != null) ? per_page : 10)
 			.asString().getBody();
 			
-			gr = convertGroupResponseJsonString(json);
+			MultipleEntryConverter<Group> mec = new MultipleEntryConverter<Group>(Group.class);
+			response = mec.convertJson(json);
 		} catch (Exception E) {
 			LOGGER.error("There was an error retrieving information from GroupMe: {}", E.getMessage());
 			throw new GroupMeAPIException();
 		}
 		
-		return gr;
+		return response.getResponse();
 	}
 	
-	public GroupResponse getFormerGroups() throws GroupMeAPIException {
-		String json = null;
-		GroupResponse gr = null;
+	public List<Group> getFormerGroups() throws GroupMeAPIException {
+		Response<List<Group>> response = null;
 		
 		try {
-			json = Unirest.get(BASE_URL + "/groups/former")
+			LOGGER.debug("Connecting to: '{}'", BASE_URL + "/groups/former");
+			String json = Unirest.get(BASE_URL + "/groups/former")
 			.queryString("token", token)
 			.asString().getBody();
 			
-			gr = convertGroupResponseJsonString(json);
+			MultipleEntryConverter<Group> mec = new MultipleEntryConverter<Group>(Group.class);
+			response = mec.convertJson(json);
 		} catch (Exception E) {
 			LOGGER.error("There was an error retrieving information from GroupMe: {}", E.getMessage());
 			throw new GroupMeAPIException();
 		}
 		
-		return gr;
+		return response.getResponse();
 	}
 	
-	
-	// Generic Json Converter Method
-	private GroupResponse convertGroupResponseJsonString(String json) throws JsonParseException, JsonMappingException, IOException {
-		return (new ObjectMapper()).readValue(json, GroupResponse.class);
+	public Group getGroupById(String id) throws GroupMeAPIException {
+		Response<Group> response = null;
+		
+		try {
+			LOGGER.debug("Connecting to: '{}'", BASE_URL + "/groups/" + id);
+			String json = Unirest.get(BASE_URL + "/groups/" + id)
+			.queryString("token", token)
+			.asString().getBody();
+			
+			SingleEntryConverter<Group> sec = new SingleEntryConverter<Group>(Group.class);
+			response = sec.convertJson(json);
+		} catch (Exception E) {
+			LOGGER.error("There was an error retrieving information from GroupMe: {}", E.getMessage());
+			throw new GroupMeAPIException();
+		}
+		
+		return response.getResponse();
 	}
 }

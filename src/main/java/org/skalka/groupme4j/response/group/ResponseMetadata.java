@@ -6,16 +6,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ResponseMetadata {
 	@JsonProperty("code")
-	private Integer code;
+	private int code;
 	
 	@JsonProperty("errors")
 	private List<String> errors;
 
-	public Integer getCode() {
+	public int getCode() {
 		return code;
 	}
 
-	public void setCode(Integer code) {
+	public void setCode(int code) {
 		this.code = code;
 	}
 
