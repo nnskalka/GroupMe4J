@@ -11,17 +11,17 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class SingleEntryConverter<T> {
-	private static final Logger LOGGER = LoggerFactory.getLogger(SingleEntryConverter.class);
+public class SingleEntryResponseConverter<T> {
+	private static final Logger LOGGER = LoggerFactory.getLogger(SingleEntryResponseConverter.class);
 	
 	private ObjectMapper mapper = new ObjectMapper();
 	private JavaType type = null;
 	
-	public SingleEntryConverter(Class<T> clazz) {
+	public SingleEntryResponseConverter(Class<T> clazz) {
 		this.type = mapper.getTypeFactory().constructParametricType(Response.class, clazz);
 	}
 	
-	public Response<T> convertJson(String json) {
+	public Response<T> parseJsonResponse(String json) {
 		Response<T> response = null;
 		
 		try {

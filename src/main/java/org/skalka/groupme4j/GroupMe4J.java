@@ -2,9 +2,11 @@ package org.skalka.groupme4j;
 
 import java.util.List;
 
-import org.skalka.groupme4j.converter.MultipleEntryConverter;
-import org.skalka.groupme4j.converter.SingleEntryConverter;
+import org.skalka.groupme4j.converter.MultipleEntryResponseConverter;
+import org.skalka.groupme4j.converter.RequestConverter;
+import org.skalka.groupme4j.converter.SingleEntryResponseConverter;
 import org.skalka.groupme4j.exception.GroupMeAPIException;
+import org.skalka.groupme4j.request.group.CreateGroupRequest;
 import org.skalka.groupme4j.response.group.Group;
 import org.skalka.groupme4j.response.group.Response;
 import org.slf4j.Logger;
@@ -36,8 +38,8 @@ public class GroupMe4J {
 			.queryString("per_page", (per_page != null) ? per_page : 10)
 			.asString().getBody();
 			
-			MultipleEntryConverter<Group> mec = new MultipleEntryConverter<Group>(Group.class);
-			response = mec.convertJson(json);
+			MultipleEntryResponseConverter<Group> mec = new MultipleEntryResponseConverter<Group>(Group.class);
+			response = mec.parseJsonResponse(json);
 		} catch (Exception E) {
 			LOGGER.error("There was an error retrieving information from GroupMe: {}", E.getMessage());
 			throw new GroupMeAPIException();
@@ -55,8 +57,8 @@ public class GroupMe4J {
 			.queryString("token", token)
 			.asString().getBody();
 			
-			MultipleEntryConverter<Group> mec = new MultipleEntryConverter<Group>(Group.class);
-			response = mec.convertJson(json);
+			MultipleEntryResponseConverter<Group> mec = new MultipleEntryResponseConverter<Group>(Group.class);
+			response = mec.parseJsonResponse(json);
 		} catch (Exception E) {
 			LOGGER.error("There was an error retrieving information from GroupMe: {}", E.getMessage());
 			throw new GroupMeAPIException();
@@ -74,8 +76,32 @@ public class GroupMe4J {
 			.queryString("token", token)
 			.asString().getBody();
 			
-			SingleEntryConverter<Group> sec = new SingleEntryConverter<Group>(Group.class);
-			response = sec.convertJson(json);
+			SingleEntryResponseConverter<Group> sec = new SingleEntryResponseConverter<Group>(Group.class);
+			response = sec.parseJsonResponse(json);
+		} catch (Exception E) {
+			LOGGER.error("There was an error retrieving information from GroupMe: {}", E.getMessage());
+			throw new GroupMeAPIException();
+		}
+		
+		return response.getResponse();
+	}
+	
+	public Group createGroup(String name) throws GroupMeAPIException {
+		Response<Group> response = null;
+		
+		try {
+			CreateGroupRequest cgr = new CreateGroupRequest();
+			cgr.setName("Test");
+			
+			RequestConverter<CreateGroupRequest> rc = new RequestConverter<CreateGroupRequest>();
+			LOGGER.debug("Connecting to: '{}'", BASE_URL + "/groups");
+			String json = Unirest.put(BASE_URL + "/groups")
+			.queryString("token", token)
+			.body(rc.parseObjectRequest(cgr))
+			.asString().toString();
+			
+			SingleEntryResponseConverter<Group> sec = new SingleEntryResponseConverter<Group>(Group.class);
+			response = sec.parseJsonResponse(json);
 		} catch (Exception E) {
 			LOGGER.error("There was an error retrieving information from GroupMe: {}", E.getMessage());
 			throw new GroupMeAPIException();

@@ -12,18 +12,18 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class MultipleEntryConverter<T> {
-	private static final Logger LOGGER = LoggerFactory.getLogger(MultipleEntryConverter.class);
+public class MultipleEntryResponseConverter<T> {
+	private static final Logger LOGGER = LoggerFactory.getLogger(MultipleEntryResponseConverter.class);
 	
 	private ObjectMapper mapper = new ObjectMapper();
 	private JavaType type = null;
 	
-	public MultipleEntryConverter(Class<T> clazz) {
+	public MultipleEntryResponseConverter(Class<T> clazz) {
 		JavaType innerType = mapper.getTypeFactory().constructParametricType(List.class, clazz);
 		this.type = mapper.getTypeFactory().constructParametricType(Response.class, innerType);
 	}
 	
-	public Response<List<T>> convertJson(String json) {
+	public Response<List<T>> parseJsonResponse(String json) {
 		Response<List<T>> response = null;
 		
 		try {

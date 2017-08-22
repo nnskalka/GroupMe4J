@@ -18,8 +18,8 @@ public class ResponseConverterTest {
 		Path p = (new File("./src/test/resources/responses/get-groups-response.txt")).toPath();
 		String json = Files.readAllLines(p).stream().map(n -> n.toString()).collect(Collectors.joining(""));
 
-		MultipleEntryConverter<Group> mec = new MultipleEntryConverter<Group>(Group.class);
-		Response<List<Group>> response = mec.convertJson(json);
+		MultipleEntryResponseConverter<Group> mec = new MultipleEntryResponseConverter<Group>(Group.class);
+		Response<List<Group>> response = mec.parseJsonResponse(json);
 		
 		Assert.assertNotNull(response);
 		Assert.assertNotEquals(response.getResponse().size(), 0);
@@ -31,8 +31,8 @@ public class ResponseConverterTest {
 		Path p = (new File("./src/test/resources/responses/get-former-groups-response.txt")).toPath();
 		String json = Files.readAllLines(p).stream().map(n -> n.toString()).collect(Collectors.joining(""));
 		
-		MultipleEntryConverter<Group> mec = new MultipleEntryConverter<Group>(Group.class);
-		Response<List<Group>> response = mec.convertJson(json);
+		MultipleEntryResponseConverter<Group> mec = new MultipleEntryResponseConverter<Group>(Group.class);
+		Response<List<Group>> response = mec.parseJsonResponse(json);
 		
 		Assert.assertNotNull(response);
 		Assert.assertNotEquals(response.getResponse().size(), 0);
@@ -44,8 +44,8 @@ public class ResponseConverterTest {
 		Path p = (new File("./src/test/resources/responses/get-group-by-id-response.txt")).toPath();
 		String json = Files.readAllLines(p).stream().map(n -> n.toString()).collect(Collectors.joining(""));
 		
-		SingleEntryConverter<Group> sec = new SingleEntryConverter<Group>(Group.class);
-		Response<Group> response = sec.convertJson(json);
+		SingleEntryResponseConverter<Group> sec = new SingleEntryResponseConverter<Group>(Group.class);
+		Response<Group> response = sec.parseJsonResponse(json);
 		
 		Assert.assertNotNull(response);
 		Assert.assertNotNull(response.getResponse());
