@@ -6,7 +6,6 @@ import org.skalka.groupme4j.GroupMe4J;
 import org.skalka.groupme4j.exception.GroupMeAPIException;
 import org.skalka.groupme4j.response.group.Group;
 
-import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
 public class GroupMe4JTest {
@@ -30,23 +29,16 @@ public class GroupMe4JTest {
 	
 	@Test
 	public void testCreateGroup() throws GroupMeAPIException {
-		/*GroupMe4J groupme = new GroupMe4J("");
-		Group g = groupme.createGroup("TESTER GROUP");
+		GroupMe4J groupme = new GroupMe4J("");
+		Group g_created = groupme.createGroup("TESTER GROUP");
+		Group g_deleted = groupme.destoryGroup(g_created.getId());
 		
-		Assert.assertNotNull(g);
-		System.out.println(g.getGroupId());*/
+		Assert.assertNotNull(g_created);
+		System.out.println(g_created.getGroupId());
 	}
 	
 	@Test
 	public void test() throws UnirestException {
-		String json = Unirest.put("https://api.groupme.com/v3/groups")
-				.header("Content-Type", "application/json;charset=UTF-8")
-				.header("accept", "application/json")
-				.header("X-Access-Token", "")
-//				.("name", "TESTGROUP")
-				.body("{\"name\":\"TESTERGROUP\"}")
-				.asString().getBody();
-		
-		System.out.println(json);
+
 	}
 }

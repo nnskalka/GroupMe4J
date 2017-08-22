@@ -91,14 +91,37 @@ public class GroupMe4J {
 		
 		try {
 			CreateGroupRequest cgr = new CreateGroupRequest();
-			cgr.setName("Test");
+			cgr.setName(name);
 			
 			RequestConverter<CreateGroupRequest> rc = new RequestConverter<CreateGroupRequest>();
 			LOGGER.debug("Connecting to: '{}'", BASE_URL + "/groups");
-			String json = Unirest.put(BASE_URL + "/groups")
-			.queryString("token", token)
+			String json = Unirest.post(BASE_URL + "/groups")
+			.header("X-Access-Token", token)
 			.body(rc.parseObjectRequest(cgr))
-			.asString().toString();
+			.asString().getBody();
+			
+			System.out.println(json);
+			
+			SingleEntryResponseConverter<Group> sec = new SingleEntryResponseConverter<Group>(Group.class);
+			response = sec.parseJsonResponse(json);
+		} catch (Exception E) {
+			LOGGER.error("There was an error retrieving information from GroupMe: {}", E.getMessage());
+			throw new GroupMeAPIException();
+		}
+		
+		return response.getResponse();
+	}
+	
+	public Group destoryGroup(String id) throws GroupMeAPIException {
+		Response<Group> response = null;
+		
+		try {
+			LOGGER.debug("Connecting to: '{}'", BASE_URL + "/groups/" + id + "/destory");
+			String json = Unirest.post(BASE_URL + "/groups/" + id + "/destory")
+			.header("X-Access-Token", token)
+			.asString().getBody();
+			
+			System.out.println(json);
 			
 			SingleEntryResponseConverter<Group> sec = new SingleEntryResponseConverter<Group>(Group.class);
 			response = sec.parseJsonResponse(json);
