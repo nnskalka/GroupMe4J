@@ -20,11 +20,11 @@ public class DtoTest {
 	  private static final int EXPECTED_CLASS_COUNT = 6 /* Dtos */ + 1 /*for the DtoTest class */;
 
 	  // The package to test
-	  private static final String POJO_PACKAGE = "org.skalka.groupme4j.response";
+	  private static final String POJO_PACKAGE = "org.skalka.groupme4j.response.group";
 
 	  @Test
 	  public void ensureExpectedPojoCount() {
-	    List <PojoClass> pojoClasses = PojoClassFactory.getPojoClasses(POJO_PACKAGE, new FilterPackageInfo());
+	    List<PojoClass> pojoClasses = PojoClassFactory.getPojoClasses(POJO_PACKAGE, new FilterPackageInfo());
 	    Affirm.affirmEquals("Classes were added / removed;", EXPECTED_CLASS_COUNT, pojoClasses.size());
 	  }
 

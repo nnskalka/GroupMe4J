@@ -7,6 +7,7 @@ import org.skalka.groupme4j.converter.RequestConverter;
 import org.skalka.groupme4j.converter.SingleEntryResponseConverter;
 import org.skalka.groupme4j.exception.GroupMeAPIException;
 import org.skalka.groupme4j.request.group.CreateGroupRequest;
+import org.skalka.groupme4j.request.group.UpdateGroupRequest;
 import org.skalka.groupme4j.response.group.Group;
 import org.skalka.groupme4j.response.group.Response;
 import org.slf4j.Logger;
@@ -93,10 +94,6 @@ public class GroupMe4J {
 	public Group createGroup(String name, String description, String imageUrl, boolean share) throws GroupMeAPIException {
 		Response<Group> response = null;
 		
-		if (name.length() > 140) {
-			throw new GroupMeAPIException();
-		}
-		
 		try {
 			CreateGroupRequest request = new CreateGroupRequest();
 			request.setName(name);
@@ -107,6 +104,39 @@ public class GroupMe4J {
 			RequestConverter<CreateGroupRequest> rc = new RequestConverter<CreateGroupRequest>();
 			LOGGER.debug("Connecting to: '{}'", BASE_URL + "/groups");
 			String json = Unirest.post(BASE_URL + "/groups")
+			.header("X-Access-Token", token)
+			.body(rc.parseObjectRequest(request))
+			.asString().getBody();
+			
+			SingleEntryResponseConverter<Group> sec = new SingleEntryResponseConverter<Group>(Group.class);
+			response = sec.parseJsonResponse(json);
+		} catch (Exception E) {
+			LOGGER.error("There was an error retrieving information from GroupMe: {}", E.getMessage());
+			throw new GroupMeAPIException();
+		}
+		
+		return response.getResponse();
+	}
+	
+	public Group updateGroup(String id, String name) throws GroupMeAPIException {
+		Group g = getGroupById(id);
+		return updateGroup(id, name, g.getImageUrl(), !g.getShareUrl().isEmpty(), g.isOfficeMode());
+	}
+
+	public Group updateGroup(String id, String name, String imageUrl, boolean shared, boolean officeMode) throws GroupMeAPIException {
+		final String url = BASE_URL + "/groups/" + id + "/update";
+		Response<Group> response = null;
+		
+		try {
+			UpdateGroupRequest request = new UpdateGroupRequest();
+			request.setName(name);
+			request.setImageUrl(imageUrl);
+			request.setShared(shared);
+			request.setOfficeMode(officeMode);
+			
+			RequestConverter<UpdateGroupRequest> rc = new RequestConverter<UpdateGroupRequest>();
+			LOGGER.debug("Connecting to: '{}'", url);
+			String json = Unirest.post(url)
 			.header("X-Access-Token", token)
 			.body(rc.parseObjectRequest(request))
 			.asString().getBody();

@@ -5,9 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class UpdateGroupRequest {
 	@JsonProperty("name")
 	private String name;
-	
-	@JsonProperty("description")
-	private String description;
 
 	@JsonProperty("image_url")
 	private String imageUrl;
@@ -15,20 +12,15 @@ public class UpdateGroupRequest {
 	@JsonProperty("share")
 	private boolean shared;
 
+	@JsonProperty("office_mode")
+	private boolean officeMode;
+
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public String getImageUrl() {
@@ -45,5 +37,13 @@ public class UpdateGroupRequest {
 
 	public void setShared(boolean share) {
 		this.shared = share;
+	}
+
+	public boolean isOfficeMode() {
+		return officeMode;
+	}
+
+	public void setOfficeMode(boolean officeMode) {
+		this.officeMode = officeMode;
 	}
 }
