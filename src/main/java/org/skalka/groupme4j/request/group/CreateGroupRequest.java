@@ -1,5 +1,7 @@
 package org.skalka.groupme4j.request.group;
 
+import org.skalka.groupme4j.exception.GroupMeAPIException;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CreateGroupRequest {
@@ -19,7 +21,11 @@ public class CreateGroupRequest {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(String name) throws GroupMeAPIException {
+		if (name.length() > 140) {
+			throw new GroupMeAPIException(/* Name Length Too Long */);
+		}
+		
 		this.name = name;
 	}
 
@@ -27,7 +33,11 @@ public class CreateGroupRequest {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(String description) throws GroupMeAPIException {
+		if (name.length() > 255) {
+			throw new GroupMeAPIException(/* Description Length Too Long */);
+		}
+		
 		this.description = description;
 	}
 

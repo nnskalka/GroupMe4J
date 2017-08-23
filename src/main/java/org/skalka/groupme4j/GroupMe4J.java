@@ -87,20 +87,29 @@ public class GroupMe4J {
 	}
 	
 	public Group createGroup(String name) throws GroupMeAPIException {
+		return createGroup(name, null, null, false);
+	}
+	
+	public Group createGroup(String name, String description, String imageUrl, boolean share) throws GroupMeAPIException {
 		Response<Group> response = null;
 		
+		if (name.length() > 140) {
+			throw new GroupMeAPIException();
+		}
+		
 		try {
-			CreateGroupRequest cgr = new CreateGroupRequest();
-			cgr.setName(name);
+			CreateGroupRequest request = new CreateGroupRequest();
+			request.setName(name);
+			request.setDescription(description);
+			request.setImageUrl(imageUrl);
+			request.setShared(share);
 			
 			RequestConverter<CreateGroupRequest> rc = new RequestConverter<CreateGroupRequest>();
 			LOGGER.debug("Connecting to: '{}'", BASE_URL + "/groups");
 			String json = Unirest.post(BASE_URL + "/groups")
 			.header("X-Access-Token", token)
-			.body(rc.parseObjectRequest(cgr))
+			.body(rc.parseObjectRequest(request))
 			.asString().getBody();
-			
-			System.out.println(json);
 			
 			SingleEntryResponseConverter<Group> sec = new SingleEntryResponseConverter<Group>(Group.class);
 			response = sec.parseJsonResponse(json);
@@ -112,24 +121,19 @@ public class GroupMe4J {
 		return response.getResponse();
 	}
 	
-	public Group destoryGroup(String id) throws GroupMeAPIException {
-		Response<Group> response = null;
+	public boolean destoryGroup(String id) throws GroupMeAPIException {
+		Integer responseCode = null;
 		
 		try {
-			LOGGER.debug("Connecting to: '{}'", BASE_URL + "/groups/" + id + "/destory");
-			String json = Unirest.post(BASE_URL + "/groups/" + id + "/destory")
+			LOGGER.debug("Connecting to: '{}'", BASE_URL + "/groups/" + id + "/destroy");
+			responseCode = Unirest.post(BASE_URL + "/groups/" + id + "/destroy")
 			.header("X-Access-Token", token)
-			.asString().getBody();
-			
-			System.out.println(json);
-			
-			SingleEntryResponseConverter<Group> sec = new SingleEntryResponseConverter<Group>(Group.class);
-			response = sec.parseJsonResponse(json);
+			.asString().getStatus();
 		} catch (Exception E) {
 			LOGGER.error("There was an error retrieving information from GroupMe: {}", E.getMessage());
 			throw new GroupMeAPIException();
 		}
 		
-		return response.getResponse();
+		return (responseCode.intValue() == 200);
 	}
 }
