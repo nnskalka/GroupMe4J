@@ -2,6 +2,8 @@ package org.skalka.groupme4j.response.group;
 
 import java.util.List;
 
+import org.skalka.groupme4j.model.message.Message;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

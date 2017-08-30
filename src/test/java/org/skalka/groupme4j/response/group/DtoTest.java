@@ -17,7 +17,7 @@ import com.openpojo.validation.test.impl.SetterTester;
 
 public class DtoTest {
 	  // Configured for expectation, so we know when a class gets added or removed.
-	  private static final int EXPECTED_CLASS_COUNT = 6 /* Dtos */ + 1 /*for the DtoTest class */;
+	  private static final int EXPECTED_CLASS_COUNT = 5 /* Dtos */ + 1 /*for the DtoTest class */;
 
 	  // The package to test
 	  private static final String POJO_PACKAGE = "org.skalka.groupme4j.response.group";

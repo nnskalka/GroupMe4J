@@ -1,4 +1,4 @@
-package org.skalka.groupme4j.response.group;
+package org.skalka.groupme4j.model.message;
 
 import java.util.List;
 
@@ -16,6 +16,9 @@ public class Message {
 	
 	@JsonProperty("attachments")
 	private List<Object> attachments = null;
+
+	@JsonProperty("event")
+	private Event event;
 
 	public String getNickname() {
 		return nickname;
@@ -47,5 +50,13 @@ public class Message {
 
 	public void setAttachments(List<Object> attachments) {
 		this.attachments = attachments;
+	}
+
+	public Event getEvent() {
+		return event;
+	}
+
+	public void setEvent(Event event) {
+		this.event = event;
 	}
 }

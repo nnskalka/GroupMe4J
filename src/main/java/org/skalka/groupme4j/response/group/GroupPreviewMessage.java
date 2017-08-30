@@ -1,5 +1,7 @@
 package org.skalka.groupme4j.response.group;
 
+import org.skalka.groupme4j.model.message.Message;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class GroupPreviewMessage {
