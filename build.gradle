@@ -5,7 +5,7 @@ plugins {
 jar {
     manifest{
         attributes (
-            "Fw-Version" : "1.0.0"
+            "Fw-Version" : "0.0.3"
         )
     }
     
