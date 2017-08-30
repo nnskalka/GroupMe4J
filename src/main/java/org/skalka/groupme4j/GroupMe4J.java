@@ -7,6 +7,7 @@ import org.skalka.groupme4j.converter.RequestConverter;
 import org.skalka.groupme4j.converter.SingleEntryResponseConverter;
 import org.skalka.groupme4j.exception.GroupMeAPIException;
 import org.skalka.groupme4j.request.group.CreateGroupRequest;
+import org.skalka.groupme4j.request.group.RejoinGroupRequest;
 import org.skalka.groupme4j.request.group.UpdateGroupRequest;
 import org.skalka.groupme4j.response.group.Group;
 import org.skalka.groupme4j.response.group.Response;
@@ -152,11 +153,12 @@ public class GroupMe4J {
 	}
 	
 	public boolean destoryGroup(String id) throws GroupMeAPIException {
+		final String url = BASE_URL + "/groups/" + id + "/destroy";
 		Integer responseCode = null;
 		
 		try {
-			LOGGER.debug("Connecting to: '{}'", BASE_URL + "/groups/" + id + "/destroy");
-			responseCode = Unirest.post(BASE_URL + "/groups/" + id + "/destroy")
+			LOGGER.debug("Connecting to: '{}'", url);
+			responseCode = Unirest.post(url)
 			.header("X-Access-Token", token)
 			.asString().getStatus();
 		} catch (Exception E) {
@@ -165,5 +167,51 @@ public class GroupMe4J {
 		}
 		
 		return (responseCode.intValue() == 200);
+	}
+
+	// /groups/:id/join/:share_token
+	public Group joinGroup(String id, String shareToken) throws GroupMeAPIException {
+		final String url = BASE_URL + "/groups/" + id + "/join/" + shareToken;
+		Response<Group> response = null;
+		
+		try {
+			LOGGER.debug("Connecting to: '{}'", url);
+			String json = Unirest.post(url)
+			.header("X-Access-Token", token)
+			.asString().getBody();
+			
+			SingleEntryResponseConverter<Group> sec = new SingleEntryResponseConverter<Group>(Group.class);
+			response = sec.parseJsonResponse(json);
+		} catch (Exception E) {
+			LOGGER.error("There was an error retrieving information from GroupMe: {}", E.getMessage());
+			throw new GroupMeAPIException();
+		}
+		
+		return response.getResponse();
+	}
+
+	public Group rejoinGroup(String id) throws GroupMeAPIException {
+		final String url = BASE_URL + "/groups/join";
+		Response<Group> response = null;
+		
+		try {
+			RejoinGroupRequest request = new RejoinGroupRequest();
+			request.setGroupId(id);
+			
+			RequestConverter<RejoinGroupRequest> rc = new RequestConverter<RejoinGroupRequest>();
+			LOGGER.debug("Connecting to: '{}'", url);
+			String json = Unirest.post(url)
+			.header("X-Access-Token", token)
+			.body(rc.parseObjectRequest(request))
+			.asString().getBody();
+			
+			SingleEntryResponseConverter<Group> sec = new SingleEntryResponseConverter<Group>(Group.class);
+			response = sec.parseJsonResponse(json);
+		} catch (Exception E) {
+			LOGGER.error("There was an error retrieving information from GroupMe: {}", E.getMessage());
+			throw new GroupMeAPIException();
+		}
+		
+		return response.getResponse();
 	}
 }
