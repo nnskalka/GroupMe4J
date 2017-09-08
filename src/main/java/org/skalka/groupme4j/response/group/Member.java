@@ -2,7 +2,9 @@ package org.skalka.groupme4j.response.group;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Member {
+import org.skalka.groupme4j.model.JacksonObject;
+
+public class Member extends JacksonObject {
 	@JsonProperty("user_id")
 	private String userId;
 	
