@@ -3,6 +3,7 @@ package org.skalka.groupme4j.model.message;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Event {
+
     @JsonProperty("type")
     private String type;
 

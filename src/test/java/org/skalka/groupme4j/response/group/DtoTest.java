@@ -16,31 +16,32 @@ import com.openpojo.validation.test.impl.GetterTester;
 import com.openpojo.validation.test.impl.SetterTester;
 
 public class DtoTest {
-	  // Configured for expectation, so we know when a class gets added or removed.
-	  private static final int EXPECTED_CLASS_COUNT = 1 /* Dtos */ + 1 /*for the DtoTest class */;
+    // Configured for expectation, so we know when a class gets added or removed.
 
-	  // The package to test
-	  private static final String POJO_PACKAGE = "org.skalka.groupme4j.response.group";
+    private static final int EXPECTED_CLASS_COUNT = 1 /* Dtos */ + 1 /*for the DtoTest class */;
 
-	  @Test
-	  public void ensureExpectedPojoCount() {
-	    List<PojoClass> pojoClasses = PojoClassFactory.getPojoClasses(POJO_PACKAGE, new FilterPackageInfo());
-	    Affirm.affirmEquals("Classes were added / removed;", EXPECTED_CLASS_COUNT, pojoClasses.size());
-	  }
+    // The package to test
+    private static final String POJO_PACKAGE = "org.skalka.groupme4j.response.group";
 
-	  @Test
-	  public void testPojoStructureAndBehavior() {
-	    Validator validator = ValidatorBuilder.create()
-	                            // Add Rules to validate structure for POJO_PACKAGE
-	                            // See com.openpojo.validation.rule.impl for more ...
-	                            .with(new GetterMustExistRule())
-	                            .with(new SetterMustExistRule())
-	                            // Add Testers to validate behaviour for POJO_PACKAGE
-	                            // See com.openpojo.validation.test.impl for more ...
-	                            .with(new SetterTester())
-	                            .with(new GetterTester())
-	                            .build();
+    @Test
+    public void ensureExpectedPojoCount() {
+        List<PojoClass> pojoClasses = PojoClassFactory.getPojoClasses(POJO_PACKAGE, new FilterPackageInfo());
+        Affirm.affirmEquals("Classes were added / removed;", EXPECTED_CLASS_COUNT, pojoClasses.size());
+    }
 
-	    validator.validate(POJO_PACKAGE, new FilterPackageInfo());
-	  }
-	}
+    @Test
+    public void testPojoStructureAndBehavior() {
+        Validator validator = ValidatorBuilder.create()
+                // Add Rules to validate structure for POJO_PACKAGE
+                // See com.openpojo.validation.rule.impl for more ...
+                .with(new GetterMustExistRule())
+                .with(new SetterMustExistRule())
+                // Add Testers to validate behaviour for POJO_PACKAGE
+                // See com.openpojo.validation.test.impl for more ...
+                .with(new SetterTester())
+                .with(new GetterTester())
+                .build();
+
+        validator.validate(POJO_PACKAGE, new FilterPackageInfo());
+    }
+}

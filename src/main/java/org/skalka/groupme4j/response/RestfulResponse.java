@@ -3,8 +3,9 @@ package org.skalka.groupme4j.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RestfulResponse<T> {
+
     @JsonProperty("meta")
-    private ResponseMetadata metadata; 
+    private ResponseMetadata metadata;
 
     @JsonProperty("response")
     private T response;

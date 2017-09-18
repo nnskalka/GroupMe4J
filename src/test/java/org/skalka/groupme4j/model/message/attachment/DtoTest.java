@@ -24,23 +24,23 @@ public class DtoTest {
 
     @Test
     public void ensureExpectedPojoCount() {
-    List<PojoClass> pojoClasses = PojoClassFactory.getPojoClasses(POJO_PACKAGE, new FilterPackageInfo());
-    Affirm.affirmEquals("Classes were added / removed;", EXPECTED_CLASS_COUNT, pojoClasses.size());
+        List<PojoClass> pojoClasses = PojoClassFactory.getPojoClasses(POJO_PACKAGE, new FilterPackageInfo());
+        Affirm.affirmEquals("Classes were added / removed;", EXPECTED_CLASS_COUNT, pojoClasses.size());
     }
 
     @Test
     public void testPojoStructureAndBehavior() {
-    Validator validator = ValidatorBuilder.create()
-                            // Add Rules to validate structure for POJO_PACKAGE
-                            // See com.openpojo.validation.rule.impl for more ...
-                            .with(new GetterMustExistRule())
-                            .with(new SetterMustExistRule())
-                            // Add Testers to validate behaviour for POJO_PACKAGE
-                            // See com.openpojo.validation.test.impl for more ...
-                            .with(new SetterTester())
-                            .with(new GetterTester())
-                            .build();
+        Validator validator = ValidatorBuilder.create()
+                // Add Rules to validate structure for POJO_PACKAGE
+                // See com.openpojo.validation.rule.impl for more ...
+                .with(new GetterMustExistRule())
+                .with(new SetterMustExistRule())
+                // Add Testers to validate behaviour for POJO_PACKAGE
+                // See com.openpojo.validation.test.impl for more ...
+                .with(new SetterTester())
+                .with(new GetterTester())
+                .build();
 
-    validator.validate(POJO_PACKAGE, new FilterPackageInfo());
+        validator.validate(POJO_PACKAGE, new FilterPackageInfo());
     }
 }

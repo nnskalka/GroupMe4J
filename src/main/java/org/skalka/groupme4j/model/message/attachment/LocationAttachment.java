@@ -3,6 +3,7 @@ package org.skalka.groupme4j.model.message.attachment;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class LocationAttachment extends Attachment {
+
     @JsonProperty("lat")
     private String latitude;
 

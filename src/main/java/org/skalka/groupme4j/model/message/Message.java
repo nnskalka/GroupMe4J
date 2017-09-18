@@ -5,58 +5,59 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Message {
-	@JsonProperty("nickname")
-	private String nickname;
-	
-	@JsonProperty("text")
-	private String text;
-	
-	@JsonProperty("image_url")
-	private String imageUrl;
-	
-	@JsonProperty("attachments")
-	private List<Object> attachments = null;
 
-	@JsonProperty("event")
-	private Event event;
+    @JsonProperty("nickname")
+    private String nickname;
 
-	public String getNickname() {
-		return nickname;
-	}
+    @JsonProperty("text")
+    private String text;
 
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
+    @JsonProperty("image_url")
+    private String imageUrl;
 
-	public String getText() {
-		return text;
-	}
+    @JsonProperty("attachments")
+    private List<Object> attachments = null;
 
-	public void setText(String text) {
-		this.text = text;
-	}
+    @JsonProperty("event")
+    private Event event;
 
-	public String getImageUrl() {
-		return imageUrl;
-	}
+    public String getNickname() {
+        return nickname;
+    }
 
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
-	public List<Object> getAttachments() {
-		return attachments;
-	}
+    public String getText() {
+        return text;
+    }
 
-	public void setAttachments(List<Object> attachments) {
-		this.attachments = attachments;
-	}
+    public void setText(String text) {
+        this.text = text;
+    }
 
-	public Event getEvent() {
-		return event;
-	}
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
-	public void setEvent(Event event) {
-		this.event = event;
-	}
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public List<Object> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<Object> attachments) {
+        this.attachments = attachments;
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
 }

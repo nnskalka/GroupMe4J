@@ -5,55 +5,56 @@ import org.skalka.groupme4j.exception.GroupMeAPIException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CreateGroupRequest {
-	@JsonProperty("name")
-	private String name;
-	
-	@JsonProperty("description")
-	private String description;
 
-	@JsonProperty("image_url")
-	private String imageUrl;
+    @JsonProperty("name")
+    private String name;
 
-	@JsonProperty("share")
-	private boolean shared;
+    @JsonProperty("description")
+    private String description;
 
-	public String getName() {
-		return name;
-	}
+    @JsonProperty("image_url")
+    private String imageUrl;
 
-	public void setName(String name) throws GroupMeAPIException {
-		if (name.length() > 140) {
-			throw new GroupMeAPIException(/* Name Length Too Long */);
-		}
-		
-		this.name = name;
-	}
+    @JsonProperty("share")
+    private boolean shared;
 
-	public String getDescription() {
-		return description;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setDescription(String description) throws GroupMeAPIException {
-		if (name.length() > 255) {
-			throw new GroupMeAPIException(/* Description Length Too Long */);
-		}
-		
-		this.description = description;
-	}
+    public void setName(String name) throws GroupMeAPIException {
+        if (name.length() > 140) {
+            throw new GroupMeAPIException(/* Name Length Too Long */);
+        }
 
-	public String getImageUrl() {
-		return imageUrl;
-	}
+        this.name = name;
+    }
 
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public boolean isShared() {
-		return shared;
-	}
+    public void setDescription(String description) throws GroupMeAPIException {
+        if (name.length() > 255) {
+            throw new GroupMeAPIException(/* Description Length Too Long */);
+        }
 
-	public void setShared(boolean share) {
-		this.shared = share;
-	}
+        this.description = description;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public boolean isShared() {
+        return shared;
+    }
+
+    public void setShared(boolean share) {
+        this.shared = share;
+    }
 }

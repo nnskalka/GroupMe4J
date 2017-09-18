@@ -5,6 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class EmojiAttachment extends Attachment {
+
     @JsonProperty("placeholder")
     private String placeholder;
 
@@ -22,7 +23,7 @@ public class EmojiAttachment extends Attachment {
     public List<List<Integer>> getCharmap() {
         return charmap;
     }
-    
+
     public void setCharmap(List<List<Integer>> charmap) {
         this.charmap = charmap;
     }

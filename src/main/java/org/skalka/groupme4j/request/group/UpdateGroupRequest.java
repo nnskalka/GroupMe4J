@@ -3,47 +3,48 @@ package org.skalka.groupme4j.request.group;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UpdateGroupRequest {
-	@JsonProperty("name")
-	private String name;
 
-	@JsonProperty("image_url")
-	private String imageUrl;
+    @JsonProperty("name")
+    private String name;
 
-	@JsonProperty("share")
-	private boolean shared;
+    @JsonProperty("image_url")
+    private String imageUrl;
 
-	@JsonProperty("office_mode")
-	private boolean officeMode;
+    @JsonProperty("share")
+    private boolean shared;
 
-	public String getName() {
-		return name;
-	}
+    @JsonProperty("office_mode")
+    private boolean officeMode;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getImageUrl() {
-		return imageUrl;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
-	public boolean isShared() {
-		return shared;
-	}
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
-	public void setShared(boolean share) {
-		this.shared = share;
-	}
+    public boolean isShared() {
+        return shared;
+    }
 
-	public boolean isOfficeMode() {
-		return officeMode;
-	}
+    public void setShared(boolean share) {
+        this.shared = share;
+    }
 
-	public void setOfficeMode(boolean officeMode) {
-		this.officeMode = officeMode;
-	}
+    public boolean isOfficeMode() {
+        return officeMode;
+    }
+
+    public void setOfficeMode(boolean officeMode) {
+        this.officeMode = officeMode;
+    }
 }
