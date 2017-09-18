@@ -23,8 +23,8 @@ import org.slf4j.LoggerFactory;
 public class GroupMe4J {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(GroupMe4J.class);
-    private final static OkHttpClient client = new OkHttpClient();
-
+    
+    private final OkHttpClient client =  new OkHttpClient();
     private final String token;
 
     public GroupMe4J(String token) {
