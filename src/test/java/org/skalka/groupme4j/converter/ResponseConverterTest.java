@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.skalka.groupme4j.response.group.Group;
-import org.skalka.groupme4j.response.group.Response;
+import org.skalka.groupme4j.model.group.Group;
+import org.skalka.groupme4j.response.RestfulResponse;
 
 public class ResponseConverterTest {
 	@Test
@@ -19,7 +19,7 @@ public class ResponseConverterTest {
 		String json = Files.readAllLines(p).stream().map(n -> n.toString()).collect(Collectors.joining(""));
 
 		MultipleEntryResponseConverter<Group> mec = new MultipleEntryResponseConverter<Group>(Group.class);
-		Response<List<Group>> response = mec.parseJsonResponse(json);
+		RestfulResponse<List<Group>> response = mec.parse(json);
 		
 		Assert.assertNotNull(response);
 		Assert.assertNotEquals(response.getResponse().size(), 0);
@@ -32,7 +32,7 @@ public class ResponseConverterTest {
 		String json = Files.readAllLines(p).stream().map(n -> n.toString()).collect(Collectors.joining(""));
 		
 		MultipleEntryResponseConverter<Group> mec = new MultipleEntryResponseConverter<Group>(Group.class);
-		Response<List<Group>> response = mec.parseJsonResponse(json);
+		RestfulResponse<List<Group>> response = mec.parse(json);
 		
 		Assert.assertNotNull(response);
 		Assert.assertNotEquals(response.getResponse().size(), 0);
@@ -45,7 +45,7 @@ public class ResponseConverterTest {
 		String json = Files.readAllLines(p).stream().map(n -> n.toString()).collect(Collectors.joining(""));
 		
 		SingleEntryResponseConverter<Group> sec = new SingleEntryResponseConverter<Group>(Group.class);
-		Response<Group> response = sec.parseJsonResponse(json);
+		RestfulResponse<Group> response = sec.parse(json);
 		
 		Assert.assertNotNull(response);
 		Assert.assertNotNull(response.getResponse());

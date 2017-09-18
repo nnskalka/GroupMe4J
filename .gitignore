@@ -37,3 +37,4 @@ gradle-app.setting
 # Project file for retaining access token outside of SVC
 access.token
 .vscode
+/.nb-gradle/

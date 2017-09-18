@@ -20,22 +20,14 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-	// Logging
-	compile("org.slf4j:slf4j-api:1.7.5")
+    // Logging
+    compile("org.slf4j:slf4j-api:1.7.5")
 
-	// Jackson Json Converter
-	compile("com.fasterxml.jackson.core:jackson-databind:2.9.0")
-    compile("com.fasterxml.jackson.core:jackson-annotations:2.9.0")
-    compile("com.fasterxml.jackson.core:jackson-core:2.9.0")
-
-    // Dependencies for Unirest
-    compile("org.apache.httpcomponents:httpclient:4.3.6")
-    compile("org.apache.httpcomponents:httpasyncclient:4.0.2")
-    compile("org.apache.httpcomponents:httpmime:4.3.6")
-    compile("org.json:json:20140107")
+    // Jackson Json Converter
+    compile("com.fasterxml.jackson.core:jackson-databind:2.9.0")
     
-    // Unirest
-    compile("com.mashape.unirest:unirest-java:1.4.9")
+    // okhttp
+    compile group:'com.squareup.okhttp3', name:'okhttp', version:'3.9.0'
     
     // Unit Testing
     testCompile("junit:junit:4.12")

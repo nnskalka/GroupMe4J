@@ -1,217 +1,249 @@
 package org.skalka.groupme4j;
 
+import java.io.IOException;
 import java.util.List;
+import okhttp3.HttpUrl;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import org.skalka.groupme4j.converter.ConverterFactory;
 
-import org.skalka.groupme4j.converter.MultipleEntryResponseConverter;
 import org.skalka.groupme4j.converter.RequestConverter;
-import org.skalka.groupme4j.converter.SingleEntryResponseConverter;
+import org.skalka.groupme4j.converter.ResponseConverter;
 import org.skalka.groupme4j.exception.GroupMeAPIException;
 import org.skalka.groupme4j.request.group.CreateGroupRequest;
 import org.skalka.groupme4j.request.group.RejoinGroupRequest;
 import org.skalka.groupme4j.request.group.UpdateGroupRequest;
-import org.skalka.groupme4j.response.group.Group;
-import org.skalka.groupme4j.response.group.Response;
+import org.skalka.groupme4j.model.group.Group;
+import org.skalka.groupme4j.response.RestfulResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mashape.unirest.http.Unirest;
-
 public class GroupMe4J {
-	private final static Logger LOGGER = LoggerFactory.getLogger(GroupMe4J.class);
-	private final static String BASE_URL = "https://api.groupme.com/v3";
-	private final String token;
-	
-	public GroupMe4J(String token) {
-		this.token = token;
-	}
-	
-	public String getToken() {
-		return this.token;
-	}
-	
-	public List<Group> getGroups(Integer page, Integer per_page) throws GroupMeAPIException {
-		Response<List<Group>> response = null;
-		
-		try {
-			LOGGER.debug("Connecting to: '{}'", BASE_URL + "/groups");
-			String json = Unirest.get(BASE_URL + "/groups")
-			.queryString("token", token)
-			.queryString("page", (page != null) ? page : 1)
-			.queryString("per_page", (per_page != null) ? per_page : 10)
-			.asString().getBody();
-			
-			MultipleEntryResponseConverter<Group> mec = new MultipleEntryResponseConverter<Group>(Group.class);
-			response = mec.parseJsonResponse(json);
-		} catch (Exception E) {
-			LOGGER.error("There was an error retrieving information from GroupMe: {}", E.getMessage());
-			throw new GroupMeAPIException();
-		}
-		
-		return response.getResponse();
-	}
-	
-	public List<Group> getFormerGroups() throws GroupMeAPIException {
-		Response<List<Group>> response = null;
-		
-		try {
-			LOGGER.debug("Connecting to: '{}'", BASE_URL + "/groups/former");
-			String json = Unirest.get(BASE_URL + "/groups/former")
-			.queryString("token", token)
-			.asString().getBody();
-			
-			MultipleEntryResponseConverter<Group> mec = new MultipleEntryResponseConverter<Group>(Group.class);
-			response = mec.parseJsonResponse(json);
-		} catch (Exception E) {
-			LOGGER.error("There was an error retrieving information from GroupMe: {}", E.getMessage());
-			throw new GroupMeAPIException();
-		}
-		
-		return response.getResponse();
-	}
-	
-	public Group getGroupById(String id) throws GroupMeAPIException {
-		Response<Group> response = null;
-		
-		try {
-			LOGGER.debug("Connecting to: '{}'", BASE_URL + "/groups/" + id);
-			String json = Unirest.get(BASE_URL + "/groups/" + id)
-			.queryString("token", token)
-			.asString().getBody();
-			
-			SingleEntryResponseConverter<Group> sec = new SingleEntryResponseConverter<Group>(Group.class);
-			response = sec.parseJsonResponse(json);
-		} catch (Exception E) {
-			LOGGER.error("There was an error retrieving information from GroupMe: {}", E.getMessage());
-			throw new GroupMeAPIException();
-		}
-		
-		return response.getResponse();
-	}
-	
-	public Group createGroup(String name) throws GroupMeAPIException {
-		return createGroup(name, null, null, false);
-	}
-	
-	public Group createGroup(String name, String description, String imageUrl, boolean share) throws GroupMeAPIException {
-		Response<Group> response = null;
-		
-		try {
-			CreateGroupRequest request = new CreateGroupRequest();
-			request.setName(name);
-			request.setDescription(description);
-			request.setImageUrl(imageUrl);
-			request.setShared(share);
-			
-			RequestConverter<CreateGroupRequest> rc = new RequestConverter<CreateGroupRequest>();
-			LOGGER.debug("Connecting to: '{}'", BASE_URL + "/groups");
-			String json = Unirest.post(BASE_URL + "/groups")
-			.header("X-Access-Token", token)
-			.body(rc.parseObjectRequest(request))
-			.asString().getBody();
-			
-			SingleEntryResponseConverter<Group> sec = new SingleEntryResponseConverter<Group>(Group.class);
-			response = sec.parseJsonResponse(json);
-		} catch (Exception E) {
-			LOGGER.error("There was an error retrieving information from GroupMe: {}", E.getMessage());
-			throw new GroupMeAPIException();
-		}
-		
-		return response.getResponse();
-	}
-	
-	public Group updateGroup(String id, String name) throws GroupMeAPIException {
-		Group g = getGroupById(id);
-		return updateGroup(id, name, g.getImageUrl(), !g.getShareUrl().isEmpty(), g.isOfficeMode());
-	}
 
-	public Group updateGroup(String id, String name, String imageUrl, boolean shared, boolean officeMode) throws GroupMeAPIException {
-		final String url = BASE_URL + "/groups/" + id + "/update";
-		Response<Group> response = null;
-		
-		try {
-			UpdateGroupRequest request = new UpdateGroupRequest();
-			request.setName(name);
-			request.setImageUrl(imageUrl);
-			request.setShared(shared);
-			request.setOfficeMode(officeMode);
-			
-			RequestConverter<UpdateGroupRequest> rc = new RequestConverter<UpdateGroupRequest>();
-			LOGGER.debug("Connecting to: '{}'", url);
-			String json = Unirest.post(url)
-			.header("X-Access-Token", token)
-			.body(rc.parseObjectRequest(request))
-			.asString().getBody();
-			
-			SingleEntryResponseConverter<Group> sec = new SingleEntryResponseConverter<Group>(Group.class);
-			response = sec.parseJsonResponse(json);
-		} catch (Exception E) {
-			LOGGER.error("There was an error retrieving information from GroupMe: {}", E.getMessage());
-			throw new GroupMeAPIException();
-		}
-		
-		return response.getResponse();
-	}
-	
-	public boolean destoryGroup(String id) throws GroupMeAPIException {
-		final String url = BASE_URL + "/groups/" + id + "/destroy";
-		Integer responseCode = null;
-		
-		try {
-			LOGGER.debug("Connecting to: '{}'", url);
-			responseCode = Unirest.post(url)
-			.header("X-Access-Token", token)
-			.asString().getStatus();
-		} catch (Exception E) {
-			LOGGER.error("There was an error retrieving information from GroupMe: {}", E.getMessage());
-			throw new GroupMeAPIException();
-		}
-		
-		return (responseCode.intValue() == 200);
-	}
+    private final static Logger LOGGER = LoggerFactory.getLogger(GroupMe4J.class);
+    private final static OkHttpClient client = new OkHttpClient();
 
-	// /groups/:id/join/:share_token
-	public Group joinGroup(String id, String shareToken) throws GroupMeAPIException {
-		final String url = BASE_URL + "/groups/" + id + "/join/" + shareToken;
-		Response<Group> response = null;
-		
-		try {
-			LOGGER.debug("Connecting to: '{}'", url);
-			String json = Unirest.post(url)
-			.header("X-Access-Token", token)
-			.asString().getBody();
-			
-			SingleEntryResponseConverter<Group> sec = new SingleEntryResponseConverter<Group>(Group.class);
-			response = sec.parseJsonResponse(json);
-		} catch (Exception E) {
-			LOGGER.error("There was an error retrieving information from GroupMe: {}", E.getMessage());
-			throw new GroupMeAPIException();
-		}
-		
-		return response.getResponse();
-	}
+    private final String token;
 
-	public Group rejoinGroup(String id) throws GroupMeAPIException {
-		final String url = BASE_URL + "/groups/join";
-		Response<Group> response = null;
-		
-		try {
-			RejoinGroupRequest request = new RejoinGroupRequest();
-			request.setGroupId(id);
-			
-			RequestConverter<RejoinGroupRequest> rc = new RequestConverter<RejoinGroupRequest>();
-			LOGGER.debug("Connecting to: '{}'", url);
-			String json = Unirest.post(url)
-			.header("X-Access-Token", token)
-			.body(rc.parseObjectRequest(request))
-			.asString().getBody();
-			
-			SingleEntryResponseConverter<Group> sec = new SingleEntryResponseConverter<Group>(Group.class);
-			response = sec.parseJsonResponse(json);
-		} catch (Exception E) {
-			LOGGER.error("There was an error retrieving information from GroupMe: {}", E.getMessage());
-			throw new GroupMeAPIException();
-		}
-		
-		return response.getResponse();
-	}
+    public GroupMe4J(String token) {
+        this.token = token;
+    }
+
+    public String getToken() {
+        return this.token;
+    }
+
+    public List<Group> getGroups(Integer page, Integer per_page) throws GroupMeAPIException {
+        RestfulResponse<List<Group>> response = null;
+
+        try {
+            LOGGER.debug("Connecting to: '{}'", WebEndpoints.GROUPS);
+            HttpUrl url = HttpUrl.parse(WebEndpoints.GROUPS).newBuilder()
+                    .query(String.format("token=%s&page=%s&per_page=%s", token, page, per_page))
+                    .build();
+
+            Request request = (new Request.Builder()).url(url).build();
+            String json = client.newCall(request).execute().body().string();
+
+            ResponseConverter<RestfulResponse<List<Group>>> mec = ConverterFactory.getMERC(Group.class);
+            response = mec.parse(json);
+        } catch (IOException IOE) {
+            LOGGER.error("There was an error retrieving information from GroupMe: {}", IOE.getMessage());
+            throw new GroupMeAPIException();
+        }
+
+        return response.getResponse();
+    }
+
+    public List<Group> getFormerGroups() throws GroupMeAPIException {
+        RestfulResponse<List<Group>> response = null;
+
+        try {
+            LOGGER.debug("Connecting to: '{}'", WebEndpoints.GROUPS_FORMER);
+            HttpUrl url = HttpUrl.parse(WebEndpoints.GROUPS_FORMER).newBuilder()
+                    .query(String.format("token=%s", token))
+                    .build();
+
+            Request request = (new Request.Builder()).url(url).build();
+            String json = client.newCall(request).execute().body().string();
+
+            ResponseConverter<RestfulResponse<List<Group>>> mec = ConverterFactory.getMERC(Group.class);
+            response = mec.parse(json);
+        } catch (IOException IOE) {
+            LOGGER.error("There was an error retrieving information from GroupMe: {}", IOE.getMessage());
+            throw new GroupMeAPIException();
+        }
+
+        return response.getResponse();
+    }
+
+    public Group getGroupById(String id) throws GroupMeAPIException {
+        RestfulResponse<Group> response = null;
+
+        try {
+            LOGGER.debug("Connecting to: '{}'", WebEndpoints.GROUPS_SHOW);
+            HttpUrl url = HttpUrl.parse(String.format(WebEndpoints.GROUPS_SHOW, id))
+                    .newBuilder().query(String.format("token=%s", token))
+                    .build();
+
+            Request request = (new Request.Builder()).url(url).build();
+            String json = client.newCall(request).execute().body().string();
+
+            ResponseConverter<RestfulResponse<Group>> sec = ConverterFactory.getSERC(Group.class);
+            response = sec.parse(json);
+        } catch (IOException IOE) {
+            LOGGER.error("There was an error retrieving information from GroupMe: {}", IOE.getMessage());
+            throw new GroupMeAPIException();
+        }
+
+        return response.getResponse();
+    }
+
+    public Group createGroup(String name) throws GroupMeAPIException {
+        return createGroup(name, null, null, false);
+    }
+
+    public Group createGroup(String name, String description, String imageUrl, boolean share) throws GroupMeAPIException {
+        RestfulResponse<Group> response = null;
+
+        try {
+            CreateGroupRequest createRequest = new CreateGroupRequest();
+            createRequest.setName(name);
+            createRequest.setDescription(description);
+            createRequest.setImageUrl(imageUrl);
+            createRequest.setShared(share);
+
+            RequestConverter<CreateGroupRequest> rc = new RequestConverter<CreateGroupRequest>();
+            String requestJson = rc.parseObjectRequest(createRequest);
+
+            RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), requestJson);
+            HttpUrl url = HttpUrl.parse(String.format(WebEndpoints.GROUPS_CREATE))
+                    .newBuilder().build();
+
+            Request request = new Request.Builder()
+                    .url(url).addHeader("X-Access-Token", token)
+                    .post(body).build();
+
+            String responseJson = client.newCall(request).execute().body().string();
+            ResponseConverter<RestfulResponse<Group>> sec = ConverterFactory.getSERC(Group.class);
+            response = sec.parse(responseJson);
+        } catch (IOException | GroupMeAPIException E) {
+            LOGGER.error("There was an error retrieving information from GroupMe: {}", E.getMessage());
+            throw new GroupMeAPIException();
+        }
+
+        return response.getResponse();
+    }
+
+    public Group updateGroup(String id, String name) throws GroupMeAPIException {
+        Group g = getGroupById(id);
+        return updateGroup(id, name, g.getImageUrl(), !g.getShareUrl().isEmpty(), g.isOfficeMode());
+    }
+
+    public Group updateGroup(String id, String name, String imageUrl, boolean shared, boolean officeMode) throws GroupMeAPIException {
+        RestfulResponse<Group> response = null;
+
+        try {
+            UpdateGroupRequest createRequest = new UpdateGroupRequest();
+            createRequest.setName(name);
+            createRequest.setImageUrl(imageUrl);
+            createRequest.setShared(shared);
+            createRequest.setOfficeMode(officeMode);
+
+            RequestConverter<UpdateGroupRequest> rc = new RequestConverter<UpdateGroupRequest>();
+            String requestJson = rc.parseObjectRequest(createRequest);
+
+            RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), requestJson);
+            HttpUrl url = HttpUrl.parse(String.format(WebEndpoints.GROUPS_UPDATE, id))
+                    .newBuilder().build();
+
+            Request request = new Request.Builder()
+                    .url(url).addHeader("X-Access-Token", token)
+                    .post(body).build();
+
+            String responseJson = client.newCall(request).execute().body().string();
+            ResponseConverter<RestfulResponse<Group>> sec = ConverterFactory.getSERC(Group.class);
+            response = sec.parse(responseJson);
+        } catch (IOException IOE) {
+            LOGGER.error("There was an error retrieving information from GroupMe: {}", IOE.getMessage());
+            throw new GroupMeAPIException();
+        }
+
+        return response.getResponse();
+    }
+
+    public boolean destoryGroup(String id) throws GroupMeAPIException {
+        Integer responseCode = null;
+
+        try {
+            RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), "");
+            HttpUrl url = HttpUrl.parse(String.format(WebEndpoints.GROUPS_DESTROY, id))
+                    .newBuilder().build();
+
+            Request request = new Request.Builder()
+                    .url(url).addHeader("X-Access-Token", token)
+                    .post(body).build();
+
+            responseCode = client.newCall(request).execute().code();
+        } catch (IOException IOE) {
+            LOGGER.error("There was an error retrieving information from GroupMe: {}", IOE.getMessage());
+            throw new GroupMeAPIException();
+        }
+
+        return (responseCode.intValue() == 200);
+    }
+
+    public Group joinGroup(String id, String shareToken) throws GroupMeAPIException {
+        RestfulResponse<Group> response = null;
+
+        try {
+            RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), "");
+            HttpUrl url = HttpUrl.parse(String.format(WebEndpoints.GROUPS_JOIN, id, shareToken))
+                    .newBuilder().build();
+
+            Request request = new Request.Builder()
+                    .url(url).addHeader("X-Access-Token", token)
+                    .post(body).build();
+
+            String responseJson = client.newCall(request).execute().body().string();
+            ResponseConverter<RestfulResponse<Group>> sec = ConverterFactory.getSERC(Group.class);
+            response = sec.parse(responseJson);
+        } catch (IOException IOE) {
+            LOGGER.error("There was an error retrieving information from GroupMe: {}", IOE.getMessage());
+            throw new GroupMeAPIException();
+        }
+
+        return response.getResponse();
+    }
+
+    public Group rejoinGroup(String id) throws GroupMeAPIException {
+        RestfulResponse<Group> response = null;
+
+        try {
+            RejoinGroupRequest rejoinRequest = new RejoinGroupRequest();
+            rejoinRequest.setGroupId(id);
+
+            RequestConverter<RejoinGroupRequest> rc = new RequestConverter<RejoinGroupRequest>();
+            String requestJson = rc.parseObjectRequest(rejoinRequest);
+
+            RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), requestJson);
+            HttpUrl url = HttpUrl.parse(String.format(WebEndpoints.GROUPS_REJOIN))
+                    .newBuilder().build();
+
+            Request request = new Request.Builder()
+                    .url(url).addHeader("X-Access-Token", token)
+                    .post(body).build();
+
+            String responseJson = client.newCall(request).execute().body().string();
+            ResponseConverter<RestfulResponse<Group>> sec = ConverterFactory.getSERC(Group.class);
+            response = sec.parse(responseJson);
+        } catch (IOException IOE) {
+            LOGGER.error("There was an error retrieving information from GroupMe: {}", IOE.getMessage());
+            throw new GroupMeAPIException();
+        }
+
+        return response.getResponse();
+    }
 }

@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.skalka.groupme4j.response.group.Group;
+import org.skalka.groupme4j.model.group.Group;
 
 public class GroupMe4JTest {
 	@Test
