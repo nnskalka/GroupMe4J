@@ -49,8 +49,6 @@ public class GroupMe4J {
 
             ResponseConverter<RestfulResponse<List<Group>>> mec = ConverterFactory.getMERC(Group.class);
             response = mec.parse(json);
-            
-            System.out.println(json);
         } catch (IOException IOE) {
             LOGGER.error("There was an error retrieving information from GroupMe: {}", IOE.getMessage());
             throw new GroupMeAPIException();
@@ -73,11 +71,8 @@ public class GroupMe4J {
 
             ResponseConverter<RestfulResponse<List<Group>>> mec = ConverterFactory.getMERC(Group.class);
             response = mec.parse(json);
-            
-            System.out.println(json);
         } catch (IOException IOE) {
             LOGGER.error("There was an error retrieving information from GroupMe: {}", IOE.getMessage());
-            IOE.printStackTrace();
             throw new GroupMeAPIException();
         }
 
@@ -98,8 +93,6 @@ public class GroupMe4J {
 
             ResponseConverter<RestfulResponse<Group>> sec = ConverterFactory.getSERC(Group.class);
             response = sec.parse(json);
-            
-            System.out.println(json);
         } catch (IOException IOE) {
             LOGGER.error("There was an error retrieving information from GroupMe: {}", IOE.getMessage());
             throw new GroupMeAPIException();
@@ -136,12 +129,8 @@ public class GroupMe4J {
             String responseJson = client.newCall(request).execute().body().string();
             ResponseConverter<RestfulResponse<Group>> sec = ConverterFactory.getSERC(Group.class);
             response = sec.parse(responseJson);
-            
-            System.out.println(requestJson);
-            System.out.println(responseJson);
         } catch (IOException | GroupMeAPIException E) {
             LOGGER.error("There was an error retrieving information from GroupMe: {}", E.getMessage());
-            E.printStackTrace();
             throw new GroupMeAPIException();
         }
 
@@ -177,9 +166,6 @@ public class GroupMe4J {
             String responseJson = client.newCall(request).execute().body().string();
             ResponseConverter<RestfulResponse<Group>> sec = ConverterFactory.getSERC(Group.class);
             response = sec.parse(responseJson);
-            
-            System.out.println(requestJson);
-            System.out.println(responseJson);
         } catch (IOException IOE) {
             LOGGER.error("There was an error retrieving information from GroupMe: {}", IOE.getMessage());
             throw new GroupMeAPIException();
@@ -201,11 +187,8 @@ public class GroupMe4J {
                     .post(body).build();
 
             responseCode = client.newCall(request).execute().code();
-            
-            System.out.println(responseCode);
         } catch (IOException IOE) {
             LOGGER.error("There was an error retrieving information from GroupMe: {}", IOE.getMessage());
-            IOE.printStackTrace();
             throw new GroupMeAPIException();
         }
 
@@ -227,8 +210,6 @@ public class GroupMe4J {
             String responseJson = client.newCall(request).execute().body().string();
             ResponseConverter<RestfulResponse<Group>> sec = ConverterFactory.getSERC(Group.class);
             response = sec.parse(responseJson);
-            
-            System.out.println(responseJson);
         } catch (IOException IOE) {
             LOGGER.error("There was an error retrieving information from GroupMe: {}", IOE.getMessage());
             throw new GroupMeAPIException();
@@ -258,9 +239,6 @@ public class GroupMe4J {
             String responseJson = client.newCall(request).execute().body().string();
             ResponseConverter<RestfulResponse<Group>> sec = ConverterFactory.getSERC(Group.class);
             response = sec.parse(responseJson);
-            
-            System.out.println(requestJson);
-            System.out.println(responseJson);
         } catch (IOException IOE) {
             LOGGER.error("There was an error retrieving information from GroupMe: {}", IOE.getMessage());
             throw new GroupMeAPIException();
