@@ -73,6 +73,7 @@ public class GroupMe4J {
             response = mec.parse(json);
         } catch (IOException IOE) {
             LOGGER.error("There was an error retrieving information from GroupMe: {}", IOE.getMessage());
+            IOE.printStackTrace();
             throw new GroupMeAPIException();
         }
 
@@ -131,6 +132,7 @@ public class GroupMe4J {
             response = sec.parse(responseJson);
         } catch (IOException | GroupMeAPIException E) {
             LOGGER.error("There was an error retrieving information from GroupMe: {}", E.getMessage());
+            E.printStackTrace();
             throw new GroupMeAPIException();
         }
 
@@ -189,6 +191,7 @@ public class GroupMe4J {
             responseCode = client.newCall(request).execute().code();
         } catch (IOException IOE) {
             LOGGER.error("There was an error retrieving information from GroupMe: {}", IOE.getMessage());
+            IOE.printStackTrace();
             throw new GroupMeAPIException();
         }
 
