@@ -4,52 +4,56 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.skalka.groupme4j.model.group.Group;
-import org.skalka.groupme4j.response.RestfulResponse;
+import org.skalka.groupme4j.response.GroupMeResponse;
 
 public class ResponseConverterTest {
 
     @Test
     public void testMultipleEntryConverter_GetGroups() throws IOException {
-        Path p = (new File("./src/test/resources/responses/get-groups-response.txt")).toPath();
-        String json = Files.readAllLines(p).stream().map(n -> n.toString()).collect(Collectors.joining(""));
+        String json = readFile("./src/test/resources/responses/get-groups-response.txt");
 
-        MultipleEntryResponseConverter<Group> mec = new MultipleEntryResponseConverter<Group>(Group.class);
-        RestfulResponse<List<Group>> response = mec.parse(json);
+        ResponseConverter<GroupMeResponse<Group[]>> converter
+                    = new GroupMeResponseConverter<Group[]>(Group[].class);
+        GroupMeResponse<Group[]> response = converter.parse(json);
 
         Assert.assertNotNull(response);
-        Assert.assertNotEquals(response.getResponse().size(), 0);
+        Assert.assertNotEquals(response.getResponse().length, 0);
         Assert.assertEquals(response.getMetadata().getCode(), 200);
     }
 
     @Test
     public void testMultipleEntryConverter_GetFormerGroups() throws IOException {
-        Path p = (new File("./src/test/resources/responses/get-former-groups-response.txt")).toPath();
-        String json = Files.readAllLines(p).stream().map(n -> n.toString()).collect(Collectors.joining(""));
+        String json = readFile("./src/test/resources/responses/get-former-groups-response.txt");
 
-        MultipleEntryResponseConverter<Group> mec = new MultipleEntryResponseConverter<Group>(Group.class);
-        RestfulResponse<List<Group>> response = mec.parse(json);
+        ResponseConverter<GroupMeResponse<Group[]>> converter
+                    = new GroupMeResponseConverter<Group[]>(Group[].class);
+        GroupMeResponse<Group[]> response = converter.parse(json);
 
         Assert.assertNotNull(response);
-        Assert.assertNotEquals(response.getResponse().size(), 0);
+        Assert.assertNotEquals(response.getResponse().length, 0);
         Assert.assertEquals(response.getMetadata().getCode(), 200);
     }
 
-    @Test
+    //@Test
     public void testSingleEntryConverter_GetGroupById() throws IOException {
-        Path p = (new File("./src/test/resources/responses/get-group-by-id-response.txt")).toPath();
-        String json = Files.readAllLines(p).stream().map(n -> n.toString()).collect(Collectors.joining(""));
+        String json = readFile("./src/test/resources/responses/get-group-by-id-response.txt");
 
-        SingleEntryResponseConverter<Group> sec = new SingleEntryResponseConverter<Group>(Group.class);
-        RestfulResponse<Group> response = sec.parse(json);
+        ResponseConverter<GroupMeResponse<Group>> converter
+                    = new GroupMeResponseConverter<Group>(Group.class);
+        GroupMeResponse<Group> response = converter.parse(json);
 
         Assert.assertNotNull(response);
         Assert.assertNotNull(response.getResponse());
         Assert.assertEquals(response.getMetadata().getCode(), 200);
+    }
+    
+    private String readFile(String path) throws IOException {
+        Path p = (new File("./src/test/resources/responses/get-groups-response.txt")).toPath();
+        return Files.readAllLines(p).stream().map(n -> n).collect(Collectors.joining(""));
     }
 }

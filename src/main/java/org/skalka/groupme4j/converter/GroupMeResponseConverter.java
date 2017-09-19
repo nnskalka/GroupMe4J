@@ -2,7 +2,6 @@ package org.skalka.groupme4j.converter;
 
 import java.io.IOException;
 
-import org.skalka.groupme4j.response.RestfulResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,20 +9,21 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.skalka.groupme4j.response.GroupMeResponse;
 
-public class SingleEntryResponseConverter<T> implements ResponseConverter<RestfulResponse<T>> {
+public class GroupMeResponseConverter<T> implements ResponseConverter<GroupMeResponse<T>> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SingleEntryResponseConverter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GroupMeResponseConverter.class);
 
-    private ObjectMapper mapper = new ObjectMapper();
-    private JavaType type = null;
+    private final ObjectMapper mapper = new ObjectMapper();
+    private final JavaType type;
 
-    public SingleEntryResponseConverter(Class<T> clazz) {
-        this.type = mapper.getTypeFactory().constructParametricType(RestfulResponse.class, clazz);
+    public GroupMeResponseConverter(Class<T> clazz) {
+        this.type = mapper.getTypeFactory().constructParametricType(GroupMeResponse.class, clazz);
     }
 
-    public RestfulResponse<T> parse(String json) {
-        RestfulResponse<T> response = null;
+    public GroupMeResponse<T> parse(String json) {
+        GroupMeResponse<T> response = null;
 
         try {
             LOGGER.debug("Attempting to convert json string: {}", json);

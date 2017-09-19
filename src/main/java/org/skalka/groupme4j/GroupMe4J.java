@@ -1,30 +1,31 @@
 package org.skalka.groupme4j;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import org.skalka.groupme4j.converter.ConverterFactory;
 
 import org.skalka.groupme4j.converter.RequestConverter;
 import org.skalka.groupme4j.converter.ResponseConverter;
+import org.skalka.groupme4j.converter.GroupMeResponseConverter;
 import org.skalka.groupme4j.exception.GroupMeAPIException;
 import org.skalka.groupme4j.request.group.CreateGroupRequest;
 import org.skalka.groupme4j.request.group.RejoinGroupRequest;
 import org.skalka.groupme4j.request.group.UpdateGroupRequest;
 import org.skalka.groupme4j.model.group.Group;
-import org.skalka.groupme4j.response.RestfulResponse;
+import org.skalka.groupme4j.response.GroupMeResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class GroupMe4J {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(GroupMe4J.class);
-    
-    private final OkHttpClient client =  new OkHttpClient();
+
+    private final OkHttpClient client = new OkHttpClient();
     private final String token;
 
     public GroupMe4J(String token) {
@@ -36,29 +37,31 @@ public class GroupMe4J {
     }
 
     public List<Group> getGroups(Integer page, Integer per_page) throws GroupMeAPIException {
-        RestfulResponse<List<Group>> response = null;
+        GroupMeResponse<Group[]> response = null;
 
         try {
             LOGGER.debug("Connecting to: '{}'", WebEndpoints.GROUPS);
             HttpUrl url = HttpUrl.parse(WebEndpoints.GROUPS).newBuilder()
-                    .query(String.format("token=%s&page=%s&per_page=%s", token, page, per_page))
-                    .build();
+                    .query(String.format("token=%s&page=%s&per_page=%s",token, page, per_page)).build();
 
             Request request = (new Request.Builder()).url(url).build();
             String json = client.newCall(request).execute().body().string();
 
-            ResponseConverter<RestfulResponse<List<Group>>> mec = ConverterFactory.getMERC(Group.class);
-            response = mec.parse(json);
+            ResponseConverter<GroupMeResponse<Group[]>> converter
+                    = new GroupMeResponseConverter<Group[]>(Group[].class);
+            response = converter.parse(json);
         } catch (IOException IOE) {
-            LOGGER.error("There was an error retrieving information from GroupMe: {}", IOE.getMessage());
+            LOGGER.error("There was an error retrieving information from GroupMe: {}",
+                    IOE.getMessage());
+            
             throw new GroupMeAPIException();
         }
 
-        return response.getResponse();
+        return Arrays.asList(response.getResponse());
     }
 
     public List<Group> getFormerGroups() throws GroupMeAPIException {
-        RestfulResponse<List<Group>> response = null;
+        GroupMeResponse<Group[]> response = null;
 
         try {
             LOGGER.debug("Connecting to: '{}'", WebEndpoints.GROUPS_FORMER);
@@ -69,18 +72,19 @@ public class GroupMe4J {
             Request request = (new Request.Builder()).url(url).build();
             String json = client.newCall(request).execute().body().string();
 
-            ResponseConverter<RestfulResponse<List<Group>>> mec = ConverterFactory.getMERC(Group.class);
-            response = mec.parse(json);
+            ResponseConverter<GroupMeResponse<Group[]>> converter
+                    = new GroupMeResponseConverter<Group[]>(Group[].class);
+            response = converter.parse(json);
         } catch (IOException IOE) {
             LOGGER.error("There was an error retrieving information from GroupMe: {}", IOE.getMessage());
             throw new GroupMeAPIException();
         }
 
-        return response.getResponse();
+        return Arrays.asList(response.getResponse());
     }
 
     public Group getGroupById(String id) throws GroupMeAPIException {
-        RestfulResponse<Group> response = null;
+        GroupMeResponse<Group> response = null;
 
         try {
             LOGGER.debug("Connecting to: '{}'", WebEndpoints.GROUPS_SHOW);
@@ -91,7 +95,8 @@ public class GroupMe4J {
             Request request = (new Request.Builder()).url(url).build();
             String json = client.newCall(request).execute().body().string();
 
-            ResponseConverter<RestfulResponse<Group>> sec = ConverterFactory.getSERC(Group.class);
+            ResponseConverter<GroupMeResponse<Group>> sec
+                    = new GroupMeResponseConverter<Group>(Group.class);
             response = sec.parse(json);
         } catch (IOException IOE) {
             LOGGER.error("There was an error retrieving information from GroupMe: {}", IOE.getMessage());
@@ -106,7 +111,7 @@ public class GroupMe4J {
     }
 
     public Group createGroup(String name, String description, String imageUrl, boolean share) throws GroupMeAPIException {
-        RestfulResponse<Group> response = null;
+        GroupMeResponse<Group> response = null;
 
         try {
             CreateGroupRequest createRequest = new CreateGroupRequest();
@@ -127,7 +132,8 @@ public class GroupMe4J {
                     .post(body).build();
 
             String responseJson = client.newCall(request).execute().body().string();
-            ResponseConverter<RestfulResponse<Group>> sec = ConverterFactory.getSERC(Group.class);
+            ResponseConverter<GroupMeResponse<Group>> sec
+                    = new GroupMeResponseConverter<Group>(Group.class);
             response = sec.parse(responseJson);
         } catch (IOException | GroupMeAPIException E) {
             LOGGER.error("There was an error retrieving information from GroupMe: {}", E.getMessage());
@@ -143,7 +149,7 @@ public class GroupMe4J {
     }
 
     public Group updateGroup(String id, String name, String imageUrl, boolean shared, boolean officeMode) throws GroupMeAPIException {
-        RestfulResponse<Group> response = null;
+        GroupMeResponse<Group> response = null;
 
         try {
             UpdateGroupRequest createRequest = new UpdateGroupRequest();
@@ -164,7 +170,8 @@ public class GroupMe4J {
                     .post(body).build();
 
             String responseJson = client.newCall(request).execute().body().string();
-            ResponseConverter<RestfulResponse<Group>> sec = ConverterFactory.getSERC(Group.class);
+            ResponseConverter<GroupMeResponse<Group>> sec
+                    = new GroupMeResponseConverter<Group>(Group.class);
             response = sec.parse(responseJson);
         } catch (IOException IOE) {
             LOGGER.error("There was an error retrieving information from GroupMe: {}", IOE.getMessage());
@@ -196,7 +203,7 @@ public class GroupMe4J {
     }
 
     public Group joinGroup(String id, String shareToken) throws GroupMeAPIException {
-        RestfulResponse<Group> response = null;
+        GroupMeResponse<Group> response = null;
 
         try {
             RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), "");
@@ -208,7 +215,8 @@ public class GroupMe4J {
                     .post(body).build();
 
             String responseJson = client.newCall(request).execute().body().string();
-            ResponseConverter<RestfulResponse<Group>> sec = ConverterFactory.getSERC(Group.class);
+            ResponseConverter<GroupMeResponse<Group>> sec
+                    = new GroupMeResponseConverter<Group>(Group.class);
             response = sec.parse(responseJson);
         } catch (IOException IOE) {
             LOGGER.error("There was an error retrieving information from GroupMe: {}", IOE.getMessage());
@@ -218,13 +226,17 @@ public class GroupMe4J {
         return response.getResponse();
     }
 
-    public Group rejoinGroup(String id) throws GroupMeAPIException {
-        RestfulResponse<Group> response = null;
+    public Group rejoinGroup(String id) {
+        RejoinGroupRequest rejoinRequest = new RejoinGroupRequest();
+        rejoinRequest.setGroupId(id);
+
+        return rejoinGroup(rejoinRequest);
+    }
+    
+    public Group rejoinGroup(RejoinGroupRequest rejoinRequest) {
+        GroupMeResponse<Group> response = null;
 
         try {
-            RejoinGroupRequest rejoinRequest = new RejoinGroupRequest();
-            rejoinRequest.setGroupId(id);
-
             RequestConverter<RejoinGroupRequest> rc = new RequestConverter<RejoinGroupRequest>();
             String requestJson = rc.parseObjectRequest(rejoinRequest);
 
@@ -237,7 +249,8 @@ public class GroupMe4J {
                     .post(body).build();
 
             String responseJson = client.newCall(request).execute().body().string();
-            ResponseConverter<RestfulResponse<Group>> sec = ConverterFactory.getSERC(Group.class);
+            ResponseConverter<GroupMeResponse<Group>> sec
+                    = new GroupMeResponseConverter<Group>(Group.class);
             response = sec.parse(responseJson);
         } catch (IOException IOE) {
             LOGGER.error("There was an error retrieving information from GroupMe: {}", IOE.getMessage());
