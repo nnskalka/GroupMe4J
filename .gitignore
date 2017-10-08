@@ -38,3 +38,4 @@ gradle-app.setting
 access.token
 .vscode
 /.nb-gradle/
+/.nb-gradle-properties
