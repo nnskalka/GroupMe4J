@@ -2,6 +2,7 @@ package org.skalka.groupme4j.model;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class JacksonObject {
 
     private final Logger LOGGER = LoggerFactory.getLogger(JacksonObject.class);

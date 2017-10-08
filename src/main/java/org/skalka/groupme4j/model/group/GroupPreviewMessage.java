@@ -3,50 +3,25 @@ package org.skalka.groupme4j.model.group;
 import org.skalka.groupme4j.model.message.Message;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 public class GroupPreviewMessage {
 
+    @Getter @Setter
     @JsonProperty("count")
     private int count;
 
+    @Getter @Setter
     @JsonProperty("last_message_id")
     private String lastMessageId;
 
+    @Getter @Setter
     @JsonProperty("last_message_created_at")
     private int lastMessageCreatedAt;
 
+    @Getter @Setter
     @JsonProperty("preview")
     private Message preview;
 
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    public String getLastMessageId() {
-        return lastMessageId;
-    }
-
-    public void setLastMessageId(String lastMessageId) {
-        this.lastMessageId = lastMessageId;
-    }
-
-    public int getLastMessageCreatedAt() {
-        return lastMessageCreatedAt;
-    }
-
-    public void setLastMessageCreatedAt(int lastMessageCreatedAt) {
-        this.lastMessageCreatedAt = lastMessageCreatedAt;
-    }
-
-    public Message getPreview() {
-        return preview;
-    }
-
-    public void setPreview(Message preview) {
-        this.preview = preview;
-    }
 }

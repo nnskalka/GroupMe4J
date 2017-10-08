@@ -3,61 +3,31 @@ package org.skalka.groupme4j.model.message;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
+import org.skalka.groupme4j.model.JacksonObject;
+import org.skalka.groupme4j.model.message.attachment.Attachment;
 
-public class Message {
+public class Message extends JacksonObject{
 
+    @Getter @Setter
     @JsonProperty("nickname")
     private String nickname;
 
+    @Getter @Setter
     @JsonProperty("text")
     private String text;
 
+    @Getter @Setter
     @JsonProperty("image_url")
     private String imageUrl;
 
+    @Getter @Setter
     @JsonProperty("attachments")
-    private List<Object> attachments = null;
+    private List<Attachment> attachments = null;
 
+    @Getter @Setter
     @JsonProperty("event")
     private Event event;
 
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public List<Object> getAttachments() {
-        return attachments;
-    }
-
-    public void setAttachments(List<Object> attachments) {
-        this.attachments = attachments;
-    }
-
-    public Event getEvent() {
-        return event;
-    }
-
-    public void setEvent(Event event) {
-        this.event = event;
-    }
 }

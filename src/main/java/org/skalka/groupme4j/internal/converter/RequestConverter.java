@@ -1,4 +1,4 @@
-package org.skalka.groupme4j.converter;
+package org.skalka.groupme4j.internal.converter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

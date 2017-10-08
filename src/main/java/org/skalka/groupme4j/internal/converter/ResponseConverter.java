@@ -1,4 +1,4 @@
-package org.skalka.groupme4j.converter;
+package org.skalka.groupme4j.internal.converter;
 
 import java.io.IOException;
 
@@ -9,16 +9,16 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.skalka.groupme4j.response.GroupMeResponse;
+import org.skalka.groupme4j.internal.response.GroupMeResponse;
 
-public class GroupMeResponseConverter<T> implements ResponseConverter<GroupMeResponse<T>> {
+public class ResponseConverter<T> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GroupMeResponseConverter.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(ResponseConverter.class);
 
     private final ObjectMapper mapper = new ObjectMapper();
     private final JavaType type;
 
-    public GroupMeResponseConverter(Class<T> clazz) {
+    public ResponseConverter(Class<T> clazz) {
         this.type = mapper.getTypeFactory().constructParametricType(GroupMeResponse.class, clazz);
     }
 

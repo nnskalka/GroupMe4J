@@ -21,4 +21,9 @@ public class WebEndpoints {
     public final static String GROUPS_REJOIN = GROUPS + "/join";
 
     public final static String GROUPS_CHANGE_OWNER = GROUPS + "/change_owners";
+    
+    
+    public final static String MESSAGES = GROUPS + "/%s/messages";
+    
+    public final static String MESSAGES_CREATE = MESSAGES;
 }
