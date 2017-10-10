@@ -17,13 +17,13 @@ import org.skalka.groupme4j.model.request.CreateGroupRequest;
 import org.skalka.groupme4j.model.request.RejoinGroupRequest;
 import org.skalka.groupme4j.model.request.UpdateGroupRequest;
 import org.skalka.groupme4j.model.group.Group;
-import org.skalka.groupme4j.model.message.Message;
-import org.skalka.groupme4j.model.message.Messages;
+import org.skalka.groupme4j.model.message.GroupMessage;
+import org.skalka.groupme4j.model.message.GroupMessages;
 import org.skalka.groupme4j.model.message.attachment.Attachment;
-import org.skalka.groupme4j.internal.request.HttpRequestor;
-import org.skalka.groupme4j.internal.request.HttpRequestorFactory;
-import org.skalka.groupme4j.internal.request.OkHttpRequestor;
-import org.skalka.groupme4j.model.request.CreateMessageRequest;
+import org.skalka.groupme4j.internal.requestor.HttpRequestor;
+import org.skalka.groupme4j.internal.requestor.HttpRequestorFactory;
+import org.skalka.groupme4j.model.chat.Chat;
+import org.skalka.groupme4j.model.request.CreateGroupMessageRequest;
 import org.skalka.groupme4j.model.response.CreateMessageResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,7 +86,7 @@ public class GroupMe4JClient {
 
     public Group updateGroup(String id, String name) {
         Group g = getGroupById(id);
-        return updateGroup(id, name, g.getImageUrl(), !g.getShareUrl().isEmpty(), g.isOfficeMode());
+        return updateGroup(id, name, g.getImageUrl(), !g.getShareUrl().isEmpty(), g.getOfficeMode());
     }
 
     public Group updateGroup(String id, String name, String imageUrl, boolean shared, boolean officeMode) {
@@ -143,17 +143,18 @@ public class GroupMe4JClient {
 
     // MEMBERS
     // MESSAGES
-    public Messages getMessagesForGroup(String id) {
+    public GroupMessages getMessagesForGroup(String id) {
         return getMessagesForGroup(id, null);
     }
     
-    public Messages getMessagesForGroup(String id, Integer limit) {
+    public GroupMessages getMessagesForGroup(String id, Integer limit) {
         return getMessagesForGroup(id, limit, null, null, null);
     }
 
-    public Messages getMessagesForGroup(String id, Integer limit, String beforeId, String sinceId, String afterId) {
+    public GroupMessages getMessagesForGroup(String id, Integer limit, String beforeId, String sinceId, String afterId) {
         Map<String, Object> queries = new HashMap<String, Object>();
         queries.put("limit", (limit != null) ? Math.min(limit, 100) : 20);
+        queries.put("token", token);
 
         if (beforeId != null) {
             queries.put("before_id", beforeId);
@@ -167,15 +168,15 @@ public class GroupMe4JClient {
             queries.put("after_id", afterId);
         }
 
-        return get(Messages.class, String.format(WebEndpoints.MESSAGES, id), queries);
+        return get(GroupMessages.class, String.format(WebEndpoints.MESSAGES, id), queries);
     }
 
-    public Message postMessage(String id, String text) {
+    public GroupMessage postMessage(String id, String text) {
         return postMessage(id, text, null);
     }
 
-    public Message postMessage(String id, String text, List<Attachment> attachments) {
-        CreateMessageRequest cmr = new CreateMessageRequest() {{
+    public GroupMessage postMessage(String id, String text, List<Attachment> attachments) {
+        CreateGroupMessageRequest cmr = new CreateGroupMessageRequest() {{
             setMessage(new MessageRequest() {{
                 setText(text);
 
@@ -188,11 +189,20 @@ public class GroupMe4JClient {
         return postMessage(id, cmr);
     }
 
-    public Message postMessage(String id, CreateMessageRequest cmr) {
+    public GroupMessage postMessage(String id, CreateGroupMessageRequest cmr) {
         return post(CreateMessageResponse.class, String.format(WebEndpoints.MESSAGES_CREATE, id), cmr).getMessage();
     }
 
     // CHATS
+    public List<Chat> getChats(Integer page, Integer per_page) {
+        Map<String, Object> queries = new HashMap<String, Object>();
+        queries.put("token", token);
+        queries.put("page", (page != null) ? page : 1);
+        queries.put("per_page", (per_page != null) ? per_page : 10);
+
+        return Arrays.asList(get(Chat[].class, WebEndpoints.CHATS, queries));
+    }
+    
     // DIRECT MESSAGES
     // LIKES
     // LEADERBOARD
@@ -209,7 +219,7 @@ public class GroupMe4JClient {
         String json = requestor.get(url, queries);
 
         ResponseConverter<RESPONSE> converter = new ResponseConverter<RESPONSE>(returnType);
-        return converter.parse(json).getResponse();
+        return converter.parse(json.trim()).getResponse();
     }
 
     private <RESPONSE, REQUEST> RESPONSE post(Class<RESPONSE> response, String url, REQUEST body) {
@@ -218,11 +228,11 @@ public class GroupMe4JClient {
         Map<String, Object> headers = new HashMap<String, Object>();
         headers.put("X-Access-Token", token);
 
-        HttpRequestor requestor = new OkHttpRequestor();
+        HttpRequestor requestor = HttpRequestorFactory.getDefaultRequestor();
         LOGGER.debug("Connecting to url (POST): {}", url);
-        String responseJson = requestor.post(url, headers, requestJson);
+        String responseJson = requestor.post(url, headers, requestJson.trim());
         ResponseConverter<RESPONSE> sec = new ResponseConverter<RESPONSE>(response);
-        return sec.parse(responseJson).getResponse();
+        return sec.parse(responseJson.trim()).getResponse();
     }
 
 }

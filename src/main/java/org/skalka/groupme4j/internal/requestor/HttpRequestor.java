@@ -1,4 +1,4 @@
-package org.skalka.groupme4j.internal.request;
+package org.skalka.groupme4j.internal.requestor;
 
 import java.util.Map;
 

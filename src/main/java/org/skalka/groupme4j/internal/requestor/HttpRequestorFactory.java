@@ -1,4 +1,4 @@
-package org.skalka.groupme4j.internal.request;
+package org.skalka.groupme4j.internal.requestor;
 
 public final class HttpRequestorFactory {
     

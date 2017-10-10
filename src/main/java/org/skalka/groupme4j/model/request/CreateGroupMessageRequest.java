@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.skalka.groupme4j.model.message.attachment.Attachment;
 
-public class CreateMessageRequest {
+public class CreateGroupMessageRequest {
 
     @Getter @Setter
     @JsonProperty("message")
@@ -18,7 +18,7 @@ public class CreateMessageRequest {
         
         @Getter @Setter
         @JsonProperty("source_guid")
-        private String sourceGuid = UUID.randomUUID().toString();
+        private String sourceGuid = "groupme4j-" + UUID.randomUUID().toString();
         
         @Getter @Setter
         @JsonProperty("text")

@@ -1,6 +1,5 @@
 package org.skalka.groupme4j.model.request;
 
-import org.skalka.groupme4j.exception.GroupMeAPIException;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

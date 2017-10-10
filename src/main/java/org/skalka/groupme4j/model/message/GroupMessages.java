@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.skalka.groupme4j.model.JacksonObject;
 
-public class Messages extends JacksonObject {
+public class GroupMessages extends JacksonObject {
 
     @Getter @Setter
     @JsonProperty("count")
@@ -14,6 +14,6 @@ public class Messages extends JacksonObject {
     
     @Getter @Setter
     @JsonProperty("messages")
-    private List<Message> messages;
+    private List<GroupMessage> messages;
 
 }

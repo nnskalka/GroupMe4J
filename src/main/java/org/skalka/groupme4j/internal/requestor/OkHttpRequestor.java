@@ -1,4 +1,4 @@
-package org.skalka.groupme4j.internal.request;
+package org.skalka.groupme4j.internal.requestor;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,25 +13,28 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class OkHttpRequestor implements HttpRequestor {
+
     private final static Logger LOGGER = LoggerFactory.getLogger(OkHttpRequestor.class);
-    
-    OkHttpClient client = new OkHttpClient();
-    
+
+    private final OkHttpClient client = new OkHttpClient();
+
     @Override
     public String get(String url, Map<String, Object> queries) {
         String query = "";
         if (queries != null) {
             final List<String> pairedQueries = new LinkedList<String>();
-            
+
             queries.forEach((String key, Object value) -> {
                 pairedQueries.add(key + "=" + value.toString());
             });
-            
+
             query = pairedQueries.stream().collect(Collectors.joining("&"));
         }
-        
+
         HttpUrl uri = HttpUrl.parse(url).newBuilder().query(query).build();
         Request request = (new Request.Builder()).url(uri).build();
+        
+        LOGGER.debug("Connecting to: '{}'", request.url().toString());
         return executeRequest(request);
     }
 
@@ -41,7 +44,7 @@ public class OkHttpRequestor implements HttpRequestor {
         HttpUrl uri = HttpUrl.parse(url).newBuilder().build();
 
         Request.Builder builder = new Request.Builder().url(uri).post(postBody);
-        
+
         if (headers != null) {
             headers.forEach((String key, Object value) -> {
                 builder.addHeader(key, value.toString());
@@ -49,20 +52,21 @@ public class OkHttpRequestor implements HttpRequestor {
         }
 
         Request request = builder.build();
+        
+        LOGGER.debug("Connecting to: '{}'; With body: '{}'", request.url().toString(), body);
         return executeRequest(request);
     }
-    
+
     private String executeRequest(Request request) {
-        String response = "";
-        
+        String response = null;
+
         try {
-            LOGGER.debug("Connecting to: '{}'", request.url().toString());
             response = client.newCall(request).execute().body().string();
         } catch (Exception E) {
             LOGGER.error(E.toString());
         }
-        
+
         return response;
     }
-    
+
 }

@@ -26,4 +26,7 @@ public class WebEndpoints {
     public final static String MESSAGES = GROUPS + "/%s/messages";
     
     public final static String MESSAGES_CREATE = MESSAGES;
+    
+    
+    public final static String CHATS = BASE_URL + "/chats";
 }

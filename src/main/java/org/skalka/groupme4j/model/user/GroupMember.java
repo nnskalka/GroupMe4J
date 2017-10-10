@@ -1,12 +1,13 @@
-package org.skalka.groupme4j.model.group;
+package org.skalka.groupme4j.model.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
 import org.skalka.groupme4j.model.JacksonObject;
 
-public class Member extends JacksonObject {
+public class GroupMember extends JacksonObject {
 
     @Getter @Setter
     @JsonProperty("user_id")
@@ -28,6 +29,10 @@ public class Member extends JacksonObject {
     @JsonProperty("muted")
     private boolean muted;
 
+    @Getter @Setter
+    @JsonProperty("roles")
+    private List<String> roles;
+    
     @Getter @Setter
     @JsonProperty("autokicked")
     private boolean autokicked;

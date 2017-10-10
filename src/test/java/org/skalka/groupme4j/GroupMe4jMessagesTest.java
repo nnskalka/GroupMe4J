@@ -1,27 +1,30 @@
 package org.skalka.groupme4j;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.stream.Collectors;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.skalka.groupme4j.model.group.Group;
-import org.skalka.groupme4j.model.message.Message;
+import org.skalka.groupme4j.model.message.GroupMessage;
+import org.skalka.groupme4j.model.message.GroupMessages;
 
-public class GroupMe4jMessagesTest {
+public class GroupMe4jMessagesTest extends GroupMe4jClientTest {
 
-    GroupMe4JClient groupme;
+    @Test
+    public void testGetMessageForGroup() {
+        Group group = groupme.getGroups(1, 1).get(0);
+        GroupMessages messages = groupme.getMessagesForGroup(group.getGroupId(), 1);
 
-    @Before
-    public void setup() throws IOException {
-        groupme = new GroupMe4JClient(retrieveToken());
+        Assert.assertNotNull(messages);
+        Assert.assertNotNull(messages.getCount());
+        Assert.assertNotEquals((Integer)0, messages.getCount());
+
+        Assert.assertNotNull(messages.getMessages());
+
+        GroupMessage message = messages.getMessages().get(0);
+        Assert.assertNotNull(message.getText());
     }
 
     @Test
-    public void testPostMessage_Text() throws Exception {
+    public void testPostGroupMessage_NoAttachments() throws Exception {
         boolean failed = false;
 
         Group createdGroup = groupme.createGroup("TESTER GROUP");
@@ -29,7 +32,7 @@ public class GroupMe4jMessagesTest {
         Assert.assertNotNull(createdGroup.getGroupId());
 
         try {
-            Message message = groupme.postMessage(createdGroup.getGroupId(), "Hello World");
+            GroupMessage message = groupme.postMessage(createdGroup.getGroupId(), "Hello World");
             Assert.assertNotNull(message);
             Assert.assertNotNull(message.getText());
             Assert.assertEquals("Hello World", message.getText());
@@ -46,8 +49,4 @@ public class GroupMe4jMessagesTest {
         }
     }
 
-    private String retrieveToken() throws IOException {
-        Path p = (new File("./access.token")).toPath();
-        return Files.readAllLines(p).stream().map(n -> n.toString()).collect(Collectors.joining(""));
-    }
 }

@@ -10,15 +10,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class RequestConverter<T> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RequestConverter.class);
-    private ObjectMapper mapper = new ObjectMapper();
+    private final static Logger LOGGER = LoggerFactory.getLogger(RequestConverter.class);
+    private final ObjectMapper mapper = new ObjectMapper();
 
     public String parseObjectRequest(T object) {
-        String request = "";
+        String json = "";
 
         try {
-            LOGGER.debug("Attempting to convert object to string: {}", object);
-            request = mapper.writeValueAsString(object);
+            json = mapper.writeValueAsString(object).trim();
+            LOGGER.debug("Attempting to convert object to string: {}", json);
         } catch (JsonParseException JPE) {
             LOGGER.error("Failure to parse object input, check syntax;{}", JPE.getMessage());
         } catch (JsonMappingException JME) {
@@ -27,6 +27,6 @@ public class RequestConverter<T> {
             LOGGER.error("Unable to process object;{}", JPE.getMessage());
         }
 
-        return request;
+        return json;
     }
 }

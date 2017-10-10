@@ -1,13 +1,24 @@
 package org.skalka.groupme4j.model.group;
 
+import org.skalka.groupme4j.model.user.GroupMember;
+import org.skalka.groupme4j.model.message.PreviewMessage;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import lombok.Getter;
 import lombok.Setter;
 import org.skalka.groupme4j.model.JacksonObject;
 
 public class Group extends JacksonObject{
+
+    @Getter @Setter
+    @JsonProperty("creator_user_id")
+    private String creatorUserId;
+
+    @Getter @Setter
+    @JsonProperty("created_at")
+    private Integer createdAt;
 
     @Getter @Setter
     @JsonProperty("id")
@@ -37,36 +48,47 @@ public class Group extends JacksonObject{
     @JsonProperty("image_url")
     private String imageUrl;
 
+    @Getter
+    @JsonProperty("max_members")
+    private Integer maxMembers;
+    
     @Getter @Setter
-    @JsonProperty("creator_user_id")
-    private String creatorUserId;
-
-    @Getter @Setter
-    @JsonProperty("created_at")
-    private int createdAt;
-
-    @Getter @Setter
-    @JsonProperty("updated_at")
-    private int updatedAt;
+    @JsonProperty("members")
+    private List<GroupMember> members = null;
 
     @Getter @Setter
     @JsonProperty("office_mode")
-    private boolean officeMode;
+    private Boolean officeMode;
 
     @Getter @Setter
+    @JsonProperty("messages")
+    private PreviewMessage previewMessage = null;
+
+    @Getter
     @JsonProperty("share_url")
     private String shareUrl;
 
     @Getter @Setter
-    @JsonProperty("members")
-    private List<Member> members = null;
+    @JsonProperty("updated_at")
+    private Integer updatedAt;
 
-    @Getter @Setter
-    @JsonProperty("messages")
-    private GroupPreviewMessage previewMessage = null;
-
-    @Getter @Setter
-    @JsonProperty("max_members")
-    private int maxMembers;
-
+    @JsonSetter("max_members")
+    public void setMaxMembers(Integer maxMembers) {
+        this.maxMembers = maxMembers;
+    }
+    
+    @JsonSetter("max_memberships")
+    public void setMaxMemberships(Integer maxMembers) {
+        this.maxMembers = maxMembers;
+    }
+    
+    @JsonSetter("share_url")
+    public void setShareUrl(String shareUrl) {
+        this.shareUrl = shareUrl;
+    }
+    
+    @JsonSetter("share_qr_code_url")
+    public void setShareQrCodeUrl(String shareQrCodeUrl) {
+        this.shareUrl = shareQrCodeUrl;
+    }
 }
