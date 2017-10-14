@@ -11,19 +11,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class JacksonObject {
+public abstract class JacksonObject {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(JacksonObject.class);
-    private Map<String, Object> otherProperties = new HashMap<String, Object>();
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    private Map<String, Object> otherProperties = null;
 
     @JsonAnyGetter
     public Object get(String key) {
-        return otherProperties.get(key);
+        return getMap().get(key);
     }
 
     @JsonAnySetter
     public void set(String name, Object value) {
-        LOGGER.debug("Unknown Property '{}' was registered with Value '{}'", name, (value != null) ? value.toString() : "null");
-        otherProperties.put(name, value);
+        LOGGER.debug("Unknown Property '{}' was registered with Value '{}'",
+                name, (value != null) ? value.toString() : "null");
+        
+        getMap().put(name, value);
     }
+
+    private Map<String, Object> getMap() {
+        return (otherProperties != null) ? otherProperties
+                : (otherProperties = new HashMap<String, Object>());
+    }
+    
 }

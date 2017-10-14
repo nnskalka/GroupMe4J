@@ -1,4 +1,4 @@
-package org.skalka.groupme4j;
+package org.skalka.groupme4j.model;
 
 import org.junit.Test;
 

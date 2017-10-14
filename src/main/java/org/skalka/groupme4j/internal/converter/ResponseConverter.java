@@ -26,7 +26,7 @@ public class ResponseConverter<T> {
         GroupMeResponse<T> response = null;
 
         try {
-            LOGGER.debug("Attempting to convert json string: {}", json);
+            LOGGER.trace("Attempting to convert json string: {}", json);
             response = mapper.readValue(json, type);
         } catch (JsonParseException JPE) {
             LOGGER.error("Failure to parse json input, checck syntax;{}", JPE.getMessage());

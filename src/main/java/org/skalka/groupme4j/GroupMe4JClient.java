@@ -1,32 +1,34 @@
 package org.skalka.groupme4j;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import okhttp3.HttpUrl;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
+import org.skalka.groupme4j.exception.GroupMeAPIException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.skalka.groupme4j.internal.converter.RequestConverter;
 import org.skalka.groupme4j.internal.converter.ResponseConverter;
-import org.skalka.groupme4j.exception.GroupMeAPIException;
-import org.skalka.groupme4j.model.request.CreateGroupRequest;
-import org.skalka.groupme4j.model.request.RejoinGroupRequest;
-import org.skalka.groupme4j.model.request.UpdateGroupRequest;
+import org.skalka.groupme4j.internal.request.CreateDirectMessageRequest;
+import org.skalka.groupme4j.internal.request.CreateGroupMessageRequest;
+import org.skalka.groupme4j.internal.request.CreateGroupRequest;
+import org.skalka.groupme4j.internal.request.CreateSmsModeRequest;
+import org.skalka.groupme4j.internal.request.RejoinGroupRequest;
+import org.skalka.groupme4j.internal.request.UpdateGroupRequest;
+import org.skalka.groupme4j.internal.request.UpdateUserRequest;
+import org.skalka.groupme4j.internal.requestor.HttpRequestor;
+import org.skalka.groupme4j.internal.requestor.HttpRequestorFactory;
+import org.skalka.groupme4j.internal.response.CreateDirectMessageResponse;
+import org.skalka.groupme4j.internal.response.CreateGroupMessageResponse;
+import org.skalka.groupme4j.internal.response.GroupMeResponse;
+import org.skalka.groupme4j.model.chat.Chat;
 import org.skalka.groupme4j.model.group.Group;
+import org.skalka.groupme4j.model.message.DirectMessage;
+import org.skalka.groupme4j.model.message.DirectMessages;
 import org.skalka.groupme4j.model.message.GroupMessage;
 import org.skalka.groupme4j.model.message.GroupMessages;
 import org.skalka.groupme4j.model.message.attachment.Attachment;
-import org.skalka.groupme4j.internal.requestor.HttpRequestor;
-import org.skalka.groupme4j.internal.requestor.HttpRequestorFactory;
-import org.skalka.groupme4j.model.chat.Chat;
-import org.skalka.groupme4j.model.request.CreateGroupMessageRequest;
-import org.skalka.groupme4j.model.response.CreateMessageResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.skalka.groupme4j.model.user.User;
 
 public class GroupMe4JClient {
 
@@ -43,11 +45,11 @@ public class GroupMe4JClient {
     }
 
     // GROUPS
-    public List<Group> getGroups() {
+    public List<Group> getGroups() throws GroupMeAPIException {
         return getGroups(null, null);
     }
 
-    public List<Group> getGroups(Integer page, Integer per_page) {
+    public List<Group> getGroups(Integer page, Integer per_page) throws GroupMeAPIException {
         Map<String, Object> queries = new HashMap<String, Object>();
         queries.put("token", token);
         queries.put("page", (page != null) ? page : 1);
@@ -56,40 +58,44 @@ public class GroupMe4JClient {
         return Arrays.asList(get(Group[].class, WebEndpoints.GROUPS, queries));
     }
 
-    public List<Group> getFormerGroups() {
+    public List<Group> getFormerGroups() throws GroupMeAPIException {
         Map<String, Object> queries = new HashMap<String, Object>();
         queries.put("token", token);
 
         return Arrays.asList(get(Group[].class, WebEndpoints.GROUPS_FORMER, queries));
     }
 
-    public Group getGroupById(String id) {
+    public Group getGroupById(String id) throws GroupMeAPIException {
         Map<String, Object> queries = new HashMap<String, Object>();
         queries.put("token", token);
 
         return get(Group.class, String.format(WebEndpoints.GROUPS_SHOW, id), queries);
     }
 
-    public Group createGroup(String name) {
+    public Group createGroup(String name) throws GroupMeAPIException {
         return createGroup(name, null, null, false);
     }
 
-    public Group createGroup(String name, String description, String imageUrl, boolean share) {
+    public Group createGroup(String name, String description, String imageUrl, boolean share) throws GroupMeAPIException {
         CreateGroupRequest createRequest = new CreateGroupRequest();
         createRequest.setName(name);
         createRequest.setDescription(description);
         createRequest.setImageUrl(imageUrl);
         createRequest.setShared(share);
 
-        return post(Group.class, WebEndpoints.GROUPS_CREATE, createRequest);
+        return createGroup(createRequest);
     }
 
-    public Group updateGroup(String id, String name) {
+    private Group createGroup(CreateGroupRequest request) throws GroupMeAPIException {
+        return post(Group.class, WebEndpoints.GROUPS_CREATE, request);
+    }
+
+    public Group updateGroup(String id, String name) throws GroupMeAPIException {
         Group g = getGroupById(id);
         return updateGroup(id, name, g.getImageUrl(), !g.getShareUrl().isEmpty(), g.getOfficeMode());
     }
 
-    public Group updateGroup(String id, String name, String imageUrl, boolean shared, boolean officeMode) {
+    public Group updateGroup(String id, String name, String imageUrl, boolean shared, boolean officeMode) throws GroupMeAPIException {
         UpdateGroupRequest createRequest = new UpdateGroupRequest();
         createRequest.setName(name);
         createRequest.setImageUrl(imageUrl);
@@ -99,59 +105,47 @@ public class GroupMe4JClient {
         return updateGroup(id, createRequest);
     }
 
-    public Group updateGroup(String id, UpdateGroupRequest createRequest) {
+    private Group updateGroup(String id, UpdateGroupRequest createRequest) throws GroupMeAPIException {
         return post(Group.class, String.format(WebEndpoints.GROUPS_UPDATE, id), createRequest);
     }
 
     public boolean destoryGroup(String id) {
-        Integer responseCode = null;
+        Map<String, Object> headers = new HashMap<String, Object>();
+        headers.put("X-Access-Token", token);
 
-        try {
-            // A unique protocol must be implemented in order to check for success
-            RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), "");
-            HttpUrl url = HttpUrl.parse(String.format(WebEndpoints.GROUPS_DESTROY, id))
-                    .newBuilder().build();
+        HttpRequestor requestor = HttpRequestorFactory.getDefaultRequestor();
+        LOGGER.debug("Connecting to url (POST): {}", String.format(WebEndpoints.GROUPS_DESTROY, id));
+        String responseJson = requestor.post(String.format(WebEndpoints.GROUPS_DESTROY, id), headers, "");
 
-            Request request = new Request.Builder()
-                    .url(url).addHeader("X-Access-Token", token)
-                    .post(body).build();
-
-            OkHttpClient client = new OkHttpClient();
-            responseCode = client.newCall(request).execute().code();
-        } catch (IOException IOE) {
-            LOGGER.error("There was an error retrieving information from GroupMe: {}", IOE.getMessage());
-            throw new GroupMeAPIException();
-        }
-
-        return (responseCode.intValue() == 200);
+        return responseJson.trim().isEmpty();
     }
 
-    public Group joinGroup(String id, String shareToken) {
+    public Group joinGroup(String id, String shareToken) throws GroupMeAPIException {
         return post(Group.class, String.format(WebEndpoints.GROUPS_JOIN, id, shareToken), "");
     }
 
-    public Group rejoinGroup(String id) {
+    public Group rejoinGroup(String id) throws GroupMeAPIException {
         RejoinGroupRequest rejoinRequest = new RejoinGroupRequest();
         rejoinRequest.setGroupId(id);
 
         return rejoinGroup(rejoinRequest);
     }
 
-    public Group rejoinGroup(RejoinGroupRequest rejoinRequest) {
+    private Group rejoinGroup(RejoinGroupRequest rejoinRequest) throws GroupMeAPIException {
         return post(Group.class, WebEndpoints.GROUPS_REJOIN, rejoinRequest);
     }
 
     // MEMBERS
     // MESSAGES
-    public GroupMessages getMessagesForGroup(String id) {
+    public GroupMessages getMessagesForGroup(String id) throws GroupMeAPIException {
         return getMessagesForGroup(id, null);
     }
-    
-    public GroupMessages getMessagesForGroup(String id, Integer limit) {
+
+    public GroupMessages getMessagesForGroup(String id, Integer limit) throws GroupMeAPIException {
         return getMessagesForGroup(id, limit, null, null, null);
     }
 
-    public GroupMessages getMessagesForGroup(String id, Integer limit, String beforeId, String sinceId, String afterId) {
+    public GroupMessages getMessagesForGroup(String id, Integer limit, String beforeId, String sinceId, String afterId) throws GroupMeAPIException {
         Map<String, Object> queries = new HashMap<String, Object>();
         queries.put("limit", (limit != null) ? Math.min(limit, 100) : 20);
         queries.put("token", token);
@@ -171,30 +165,42 @@ public class GroupMe4JClient {
         return get(GroupMessages.class, String.format(WebEndpoints.MESSAGES, id), queries);
     }
 
-    public GroupMessage postMessage(String id, String text) {
+    public GroupMessage postMessage(String id, String text) throws GroupMeAPIException {
         return postMessage(id, text, null);
     }
 
-    public GroupMessage postMessage(String id, String text, List<Attachment> attachments) {
-        CreateGroupMessageRequest cmr = new CreateGroupMessageRequest() {{
-            setMessage(new MessageRequest() {{
-                setText(text);
+    public GroupMessage postMessage(String id, List<Attachment> attachments) throws GroupMeAPIException {
+        return postMessage(id, null, attachments);
+    }
 
-                if (attachments != null) {
-                    setAttachments(attachments);
-                }
-            }});
-        }};
+    public GroupMessage postMessage(String id, String text, List<Attachment> attachments) throws GroupMeAPIException {
+        CreateGroupMessageRequest cmr = new CreateGroupMessageRequest() {
+            {
+                setMessage(new MessageRequest() {
+                    {
+                        setText(text);
+
+                        if (attachments != null) {
+                            setAttachments(attachments);
+                        }
+                    }
+                });
+            }
+        };
 
         return postMessage(id, cmr);
     }
 
-    public GroupMessage postMessage(String id, CreateGroupMessageRequest cmr) {
-        return post(CreateMessageResponse.class, String.format(WebEndpoints.MESSAGES_CREATE, id), cmr).getMessage();
+    private GroupMessage postMessage(String id, CreateGroupMessageRequest cmr) throws GroupMeAPIException {
+        return post(CreateGroupMessageResponse.class, String.format(WebEndpoints.MESSAGES_CREATE, id), cmr).getMessage();
     }
 
     // CHATS
-    public List<Chat> getChats(Integer page, Integer per_page) {
+    public List<Chat> getChats() throws GroupMeAPIException {
+        return getChats(null, null);
+    }
+
+    public List<Chat> getChats(Integer page, Integer per_page) throws GroupMeAPIException {
         Map<String, Object> queries = new HashMap<String, Object>();
         queries.put("token", token);
         queries.put("page", (page != null) ? page : 1);
@@ -202,37 +208,144 @@ public class GroupMe4JClient {
 
         return Arrays.asList(get(Chat[].class, WebEndpoints.CHATS, queries));
     }
-    
+
     // DIRECT MESSAGES
+    public DirectMessages getDirectMessages(String otherUserId) throws GroupMeAPIException {
+        return getDirectMessages(otherUserId, null, null);
+    }
+
+    public DirectMessages getDirectMessages(String otherUserId, String beforeId, String afterId) throws GroupMeAPIException {
+        Map<String, Object> queries = new HashMap<String, Object>();
+        queries.put("token", token);
+        queries.put("other_user_id", otherUserId);
+
+        if (beforeId != null) {
+            queries.put("before_id", beforeId);
+        }
+
+        if (afterId != null) {
+            queries.put("after_id", afterId);
+        }
+
+        return get(DirectMessages.class, WebEndpoints.DIRECT_MESSAGES, queries);
+    }
+
+    public DirectMessage postDirectMessage(String conversationId, String text) throws GroupMeAPIException {
+        return postDirectMessage(conversationId, text, null);
+    }
+
+    public DirectMessage postDirectMessage(String conversationId, List<Attachment> attachments) throws GroupMeAPIException {
+        return postDirectMessage(conversationId, null, attachments);
+    }
+
+    public DirectMessage postDirectMessage(String conversationId, String text, List<Attachment> attachments) throws GroupMeAPIException {
+        CreateDirectMessageRequest cdmr = new CreateDirectMessageRequest() {
+            {
+                setDirectMessage(new CreateDirectMessageRequest.MessageRequest() {
+                    {
+                        setAttachments(attachments);
+                        setRecipientId(conversationId);
+                        setText(text);
+                    }
+                });
+            }
+        };
+
+        return postDirectMessage(cdmr);
+    }
+
+    private DirectMessage postDirectMessage(CreateDirectMessageRequest request) throws GroupMeAPIException {
+        return post(CreateDirectMessageResponse.class, WebEndpoints.DIRECT_MESSAGES, request).getMessage();
+    }
+
     // LIKES
     // LEADERBOARD
     // BOTS
     // USERS
-    // SMS MODE
-    // BLOCKS
-    
-    // Utility Methods for GroupmeClient
-    
-    private <RESPONSE> RESPONSE get(Class<RESPONSE> returnType, String url, Map<String, Object> queries) {
-        HttpRequestor requestor = HttpRequestorFactory.getDefaultRequestor();
-        LOGGER.debug("Connecting to url (GET): {}", url);
-        String json = requestor.get(url, queries);
+    public User getMe() throws GroupMeAPIException {
+        Map<String, Object> queries = new HashMap<String, Object>();
+        queries.put("token", token);
 
-        ResponseConverter<RESPONSE> converter = new ResponseConverter<RESPONSE>(returnType);
-        return converter.parse(json.trim()).getResponse();
+        return get(User.class, WebEndpoints.USER_ME, queries);
     }
 
-    private <RESPONSE, REQUEST> RESPONSE post(Class<RESPONSE> response, String url, REQUEST body) {
+    public User updateUser(String name) throws GroupMeAPIException {
+        return updateUser(name, null, null, null);
+    }
+
+    public User updateUser(String name, String avatarUrl, String email, String zipCode) throws GroupMeAPIException {
+        UpdateUserRequest request = new UpdateUserRequest();
+        User me = getMe();
+
+        request.setAvatarUrl((avatarUrl != null) ? avatarUrl : me.getImageUrl());
+        request.setEmail((email != null) ? email : me.getEmail());
+        request.setName((name != null) ? name : me.getName());
+        request.setZipCode((zipCode != null) ? zipCode : me.getZipCode());
+
+        return updateUser(request);
+    }
+
+    private User updateUser(UpdateUserRequest request) throws GroupMeAPIException {
+        return post(User.class, WebEndpoints.USER_UPDATE, request);
+    }
+
+    // SMS MODE
+    public boolean enableSmsMode(Integer duration) {
+        CreateSmsModeRequest request = new CreateSmsModeRequest();
+        request.setDuration(duration);
+        request.setRegistrationId(token);
+
+        RequestConverter<CreateSmsModeRequest> converter = new RequestConverter<CreateSmsModeRequest>();
+        String json = converter.parseObjectRequest(request);
+
+        return post(WebEndpoints.SMS_MODE_CREATE, json).isEmpty();
+    }
+
+    public boolean disableSmsMode() {
+        return post(WebEndpoints.SMS_MODE_DELETE, "").isEmpty();
+    }
+
+    // BLOCKS
+    // Utility Methods for GroupmeClient
+    private <RESPONSE> RESPONSE get(Class<RESPONSE> returnType, String url, Map<String, Object> queries) throws GroupMeAPIException {
+        HttpRequestor requestor = HttpRequestorFactory.getDefaultRequestor();
+        LOGGER.debug("Connecting to url (GET): {}", url);
+        String respJson = requestor.get(url, queries);
+
+        ResponseConverter<RESPONSE> responseConverter = new ResponseConverter<RESPONSE>(returnType);
+        GroupMeResponse<RESPONSE> response = responseConverter.parse(respJson.trim());
+
+        if (response.getErrors() != null) {
+            throw new GroupMeAPIException(response.getErrors());
+        }
+
+        return response.getResponse();
+    }
+
+    private <RESPONSE, REQUEST> RESPONSE post(Class<RESPONSE> returnType, String url, REQUEST body) throws GroupMeAPIException {
         RequestConverter<REQUEST> rc = new RequestConverter<REQUEST>();
-        String requestJson = rc.parseObjectRequest(body);
+        String reqJson = rc.parseObjectRequest(body);
+
+        String respJson = post(url, reqJson.trim());
+        ResponseConverter<RESPONSE> responseConverter = new ResponseConverter<RESPONSE>(returnType);
+        GroupMeResponse<RESPONSE> response = responseConverter.parse(respJson.trim());
+
+        if (response.getErrors() != null) {
+            throw new GroupMeAPIException(response.getErrors());
+        }
+
+        return response.getResponse();
+    }
+
+    private String post(String url, String body) {
         Map<String, Object> headers = new HashMap<String, Object>();
         headers.put("X-Access-Token", token);
 
         HttpRequestor requestor = HttpRequestorFactory.getDefaultRequestor();
         LOGGER.debug("Connecting to url (POST): {}", url);
-        String responseJson = requestor.post(url, headers, requestJson.trim());
-        ResponseConverter<RESPONSE> sec = new ResponseConverter<RESPONSE>(response);
-        return sec.parse(responseJson.trim()).getResponse();
+        String responseJson = requestor.post(url, headers, body);
+
+        return responseJson.trim();
     }
 
 }

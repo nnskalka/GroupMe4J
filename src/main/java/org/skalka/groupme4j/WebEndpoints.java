@@ -29,4 +29,22 @@ public class WebEndpoints {
     
     
     public final static String CHATS = BASE_URL + "/chats";
+    
+    
+    public final static String DIRECT_MESSAGES = BASE_URL + "/direct_messages";
+    
+    
+    public final static String USER = BASE_URL + "/users";
+    
+    public final static String USER_ME = USER + "/me";
+    
+    public final static String USER_UPDATE = USER + "/update";
+    
+    
+    public final static String SMS_MODE = USER + "/sms_mode";
+    
+    public final static String SMS_MODE_CREATE = SMS_MODE;
+    
+    public final static String SMS_MODE_DELETE = SMS_MODE + "/delete";
+    
 }

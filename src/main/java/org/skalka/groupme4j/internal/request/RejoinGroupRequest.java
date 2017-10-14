@@ -1,4 +1,4 @@
-package org.skalka.groupme4j.model.request;
+package org.skalka.groupme4j.internal.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

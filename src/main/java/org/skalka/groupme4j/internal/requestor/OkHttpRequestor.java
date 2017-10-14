@@ -34,10 +34,10 @@ public class OkHttpRequestor implements HttpRequestor {
         HttpUrl uri = HttpUrl.parse(url).newBuilder().query(query).build();
         Request request = (new Request.Builder()).url(uri).build();
         
-        LOGGER.debug("Connecting to: '{}'", request.url().toString());
+        LOGGER.trace("Connecting to: '{}'", request.url().toString());
         return executeRequest(request);
     }
-
+    
     @Override
     public String post(String url, Map<String, Object> headers, String body) {
         RequestBody postBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), body);
@@ -53,7 +53,7 @@ public class OkHttpRequestor implements HttpRequestor {
 
         Request request = builder.build();
         
-        LOGGER.debug("Connecting to: '{}'; With body: '{}'", request.url().toString(), body);
+        LOGGER.trace("Connecting to: '{}'; With body: '{}'", request.url().toString(), body);
         return executeRequest(request);
     }
 

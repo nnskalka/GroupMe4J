@@ -1,7 +1,6 @@
 package org.skalka.groupme4j.model.group;
 
 import org.skalka.groupme4j.model.user.GroupMember;
-import org.skalka.groupme4j.model.message.PreviewMessage;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,7 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.skalka.groupme4j.model.JacksonObject;
 
-public class Group extends JacksonObject{
+public class Group extends JacksonObject {
 
     @Getter @Setter
     @JsonProperty("creator_user_id")
@@ -62,7 +61,7 @@ public class Group extends JacksonObject{
 
     @Getter @Setter
     @JsonProperty("messages")
-    private PreviewMessage previewMessage = null;
+    private PreviewGroupMessage previewMessage = null;
 
     @Getter
     @JsonProperty("share_url")

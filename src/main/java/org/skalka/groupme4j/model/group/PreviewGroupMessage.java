@@ -1,11 +1,12 @@
-package org.skalka.groupme4j.model.message;
+package org.skalka.groupme4j.model.group;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.skalka.groupme4j.model.JacksonObject;
+import org.skalka.groupme4j.model.message.GroupMessage;
 
-public class PreviewMessage extends JacksonObject {
+public class PreviewGroupMessage extends JacksonObject {
 
     @Getter @Setter
     @JsonProperty("count")

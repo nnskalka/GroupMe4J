@@ -3,12 +3,13 @@ package org.skalka.groupme4j;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
+import org.skalka.groupme4j.exception.GroupMeAPIException;
 import org.skalka.groupme4j.model.chat.Chat;
 
-public class GroupMe4jChatTest extends GroupMe4jClientTest {
+public class GroupMe4JChatTest extends GroupMe4JClientTest {
     
     @Test
-    public void testGetChats() {
+    public void testGetChats() throws GroupMeAPIException {
         List<Chat> chats = groupme.getChats(1, 10);
         
         Assert.assertEquals(10, chats.size());

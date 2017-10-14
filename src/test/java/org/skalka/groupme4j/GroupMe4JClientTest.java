@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.util.stream.Collectors;
 import org.junit.Before;
 
-public class GroupMe4jClientTest {
+public class GroupMe4JClientTest {
 
     protected GroupMe4JClient groupme;
 

@@ -1,5 +1,6 @@
 package org.skalka.groupme4j.model.message;
 
+import org.skalka.groupme4j.model.message.event.Event;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import lombok.Getter;
@@ -27,7 +28,7 @@ public abstract class Message extends JacksonObject {
     
     @Getter @Setter
     @JsonProperty("favorited_by")
-    public List<Object> favoritedBy = null;
+    private List<Object> favoritedBy = null;
 
     @Getter @Setter
     @JsonProperty("id")

@@ -5,7 +5,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.skalka.groupme4j.model.group.Group;
 
-public class GroupMe4JGroupTest extends GroupMe4jClientTest {
+public class GroupMe4JGroupTest extends GroupMe4JClientTest {
 
     @Test
     public void testGroups() throws Exception {
@@ -26,11 +26,11 @@ public class GroupMe4JGroupTest extends GroupMe4jClientTest {
     @Test
     public void testGetGroupById() throws Exception {
         // Grabbing list of groups to pick one to load individually
-        List<Group> groups = groupme.getGroups(null, null);
+        List<Group> groups = groupme.getGroups(1, 1);
 
         Assert.assertNotNull(groups);
-        Assert.assertNotEquals(0, groups.size());
-        Assert.assertNotNull(groups.get(0).getId());
+        Assert.assertEquals(1, groups.size());
+        Assert.assertNotNull(groups.get(0).getGroupId());
 
         // Getting individual group
         Group group = groupme.getGroupById(groups.get(0).getGroupId());

@@ -17,5 +17,11 @@ public class LocationAttachment extends Attachment {
     @Getter @Setter
     @JsonProperty("name")
     private String name;
+    
+    public LocationAttachment() {
+        super();
+        
+        setType(Attachment.LOCATION_TYPE);
+    }
 
 }
