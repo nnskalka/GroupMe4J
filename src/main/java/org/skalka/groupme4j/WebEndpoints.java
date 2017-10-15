@@ -34,6 +34,17 @@ public class WebEndpoints {
     public final static String DIRECT_MESSAGES = BASE_URL + "/direct_messages";
     
     
+    public final static String BOT = BASE_URL + "/bots";
+    
+    public final static String BOT_INDEX = BOT;
+    
+    public final static String BOT_CREATE = BOT;
+    
+    public final static String BOT_POST = BOT + "/post";
+    
+    public final static String BOT_DESTROY = BOT + "/destroy";
+    
+    
     public final static String USER = BASE_URL + "/users";
     
     public final static String USER_ME = USER + "/me";

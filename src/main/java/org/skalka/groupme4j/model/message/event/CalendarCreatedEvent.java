@@ -6,18 +6,26 @@ import lombok.Setter;
 import org.skalka.groupme4j.model.JacksonObject;
 import org.skalka.groupme4j.model.user.EventUser;
 
-public class GroupNameChangeEvent extends Event {
+public class CalendarCreatedEvent extends Event {
 
     @Getter @Setter
     @JsonProperty("data")
-    private GroupNameChangeEventData data;
+    private CalendarCreatedEventData data;
     
-    public class GroupNameChangeEventData extends JacksonObject {
+    public class CalendarCreatedEventData extends JacksonObject {
+        
+        @Getter @Setter
+        @JsonProperty("event")
+        private CalendarEvent event;
 
+        @Getter @Setter
+        @JsonProperty("url")
+        private String url;
+        
         @Getter @Setter
         @JsonProperty("user")
         private EventUser user;
-
+        
     }
     
 }

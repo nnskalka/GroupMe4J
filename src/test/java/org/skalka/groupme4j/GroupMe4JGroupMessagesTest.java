@@ -43,18 +43,31 @@ public class GroupMe4JGroupMessagesTest extends GroupMe4JClientTest {
     
     @Test
     public void testGetMessageForGroup() throws GroupMeAPIException {
+        final int NUMBER_OF_GROUPS = 10;
+
         // Getting a group chat that was not just created
-        Group group = groupme.getGroups(1, 2).get(1);
-        GroupMessages messages = groupme.getMessagesForGroup(group.getGroupId());
+        List<Group> groups = groupme.getGroups(1, NUMBER_OF_GROUPS);
+        
+        Assert.assertNotNull(groups);
+        Assert.assertEquals(NUMBER_OF_GROUPS, groups.size());
+        
+        for (int i = 1; i < groups.size(); i++) {
+            Group group = groups.get(i);
+            
+            Assert.assertNotNull(group);
+            Assert.assertNotNull(group.getGroupId());
+            
+            GroupMessages messages = groupme.getMessagesForGroup(group.getGroupId(), 50);
 
-        Assert.assertNotNull(messages);
-        Assert.assertNotNull(messages.getCount());
-        Assert.assertNotEquals(0, messages.getMessages().size());
+            Assert.assertNotNull(messages);
+            Assert.assertNotNull(messages.getCount());
+            Assert.assertNotEquals(0, messages.getMessages().size());
 
-        Assert.assertNotNull(messages.getMessages());
+            Assert.assertNotNull(messages.getMessages());
 
-        GroupMessage message = messages.getMessages().get(0);
-        Assert.assertNotNull(message.getId());
+            GroupMessage message = messages.getMessages().get(0);
+            Assert.assertNotNull(message.getId());
+        }
     }
 
     @Test

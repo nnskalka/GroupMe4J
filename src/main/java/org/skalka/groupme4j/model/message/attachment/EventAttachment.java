@@ -4,14 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-public class ImageAttachment extends Attachment {
+public class EventAttachment extends Attachment {
 
     @Getter @Setter
-    @JsonProperty("source_url")
-    private String sourceUrl;
+    @JsonProperty("event_id")
+    private String fileId;
     
     @Getter @Setter
-    @JsonProperty("url")
-    private String url;
-
+    @JsonProperty("view")
+    private String view;
+    
 }

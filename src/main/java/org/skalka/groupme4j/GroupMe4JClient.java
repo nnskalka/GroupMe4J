@@ -9,10 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.skalka.groupme4j.internal.converter.RequestConverter;
 import org.skalka.groupme4j.internal.converter.ResponseConverter;
+import org.skalka.groupme4j.internal.request.CreateBotRequest;
 import org.skalka.groupme4j.internal.request.CreateDirectMessageRequest;
 import org.skalka.groupme4j.internal.request.CreateGroupMessageRequest;
 import org.skalka.groupme4j.internal.request.CreateGroupRequest;
 import org.skalka.groupme4j.internal.request.CreateSmsModeRequest;
+import org.skalka.groupme4j.internal.request.DestroyBotRequest;
 import org.skalka.groupme4j.internal.request.RejoinGroupRequest;
 import org.skalka.groupme4j.internal.request.UpdateGroupRequest;
 import org.skalka.groupme4j.internal.request.UpdateUserRequest;
@@ -21,6 +23,7 @@ import org.skalka.groupme4j.internal.requestor.HttpRequestorFactory;
 import org.skalka.groupme4j.internal.response.CreateDirectMessageResponse;
 import org.skalka.groupme4j.internal.response.CreateGroupMessageResponse;
 import org.skalka.groupme4j.internal.response.GroupMeResponse;
+import org.skalka.groupme4j.model.bot.Bot;
 import org.skalka.groupme4j.model.chat.Chat;
 import org.skalka.groupme4j.model.group.Group;
 import org.skalka.groupme4j.model.message.DirectMessage;
@@ -110,14 +113,7 @@ public class GroupMe4JClient {
     }
 
     public boolean destoryGroup(String id) {
-        Map<String, Object> headers = new HashMap<String, Object>();
-        headers.put("X-Access-Token", token);
-
-        HttpRequestor requestor = HttpRequestorFactory.getDefaultRequestor();
-        LOGGER.debug("Connecting to url (POST): {}", String.format(WebEndpoints.GROUPS_DESTROY, id));
-        String responseJson = requestor.post(String.format(WebEndpoints.GROUPS_DESTROY, id), headers, "");
-
-        return responseJson.trim().isEmpty();
+        return post(String.format(WebEndpoints.GROUPS_DESTROY, id), "").isEmpty();
     }
 
     public Group joinGroup(String id, String shareToken) throws GroupMeAPIException {
@@ -260,7 +256,45 @@ public class GroupMe4JClient {
 
     // LIKES
     // LEADERBOARD
+    
+    
     // BOTS
+    public Bot createBot(String name, String groupId) throws GroupMeAPIException {
+        CreateBotRequest request = new CreateBotRequest();
+        request.setAvatarUrl("");
+        request.setCallbackUrl("");
+        request.setDmNotification(0);
+        request.setGroupId(groupId);
+        request.setName(name);
+        
+        return createBot(request);
+    }
+    
+    private Bot createBot(CreateBotRequest request) throws GroupMeAPIException {
+        return post(Bot.class, WebEndpoints.BOT_CREATE, request);
+    }
+    
+    public List<Bot> getBots() throws GroupMeAPIException {
+        Map<String, Object> queries = new HashMap<String, Object>();
+        queries.put("token", token);
+        
+        return Arrays.asList(get(Bot[].class, WebEndpoints.BOT_INDEX, queries));
+    }
+    
+    public boolean deleteBot(String botId) {
+        DestroyBotRequest request = new DestroyBotRequest();
+        request.setBotId(botId);
+        
+        return deleteBot(request);
+    }
+    
+    public boolean deleteBot(DestroyBotRequest request) {
+        RequestConverter<DestroyBotRequest> converter = new RequestConverter<DestroyBotRequest>();
+        String json = converter.parseObjectRequest(request);
+        
+        return post(WebEndpoints.BOT_DESTROY, json).isEmpty();
+    }
+    
     // USERS
     public User getMe() throws GroupMeAPIException {
         Map<String, Object> queries = new HashMap<String, Object>();
@@ -317,6 +351,8 @@ public class GroupMe4JClient {
 
         if (response.getErrors() != null) {
             throw new GroupMeAPIException(response.getErrors());
+        } else if (response.getMetadata().getErrors() != null) {
+            throw new GroupMeAPIException(response.getMetadata().getErrors());
         }
 
         return response.getResponse();
@@ -332,6 +368,8 @@ public class GroupMe4JClient {
 
         if (response.getErrors() != null) {
             throw new GroupMeAPIException(response.getErrors());
+        } else if (response.getMetadata().getErrors() != null) {
+            throw new GroupMeAPIException(response.getMetadata().getErrors());
         }
 
         return response.getResponse();
