@@ -6,21 +6,21 @@ import lombok.Setter;
 import org.skalka.groupme4j.model.JacksonObject;
 import org.skalka.groupme4j.model.user.EventUser;
 
-public class GroupTopicChangeEvent extends Event {
-    
+public class MemberRemovedEvent extends Event {
+
     @Getter @Setter
     @JsonProperty("data")
-    private GroupTopicChangeEventData data;
+    private MemberRemovedEventData data;
     
-    public class GroupTopicChangeEventData extends JacksonObject {
+    public class MemberRemovedEventData extends JacksonObject {
         
         @Getter @Setter
-        @JsonProperty("topic")
-        private String topic;
+        @JsonProperty("remover_user")
+        private EventUser removerUser;
         
         @Getter @Setter
-        @JsonProperty("user")
-        private EventUser user;
+        @JsonProperty("removed_user")
+        private EventUser removedUser;
         
     }
     

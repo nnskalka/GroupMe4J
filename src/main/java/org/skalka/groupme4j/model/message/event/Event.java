@@ -23,7 +23,9 @@ import org.skalka.groupme4j.model.JacksonObject;
   @Type(value = GroupNameChangeEvent.class, name = Event.GROUP_NAME_CHANGE),
   @Type(value = GroupTopicChangeEvent.class, name = Event.GROUP_TOPIC_CHANGE),
   
-  @Type(value = MemberExitedEvent.class, name = Event.MEMBER_EXITED_CHAT)
+  @Type(value = MemberAddedEvent.class, name = Event.MEMBER_ADDED_GROUP),
+  @Type(value = MemberExitedEvent.class, name = Event.MEMBER_EXITED_CHAT),
+  @Type(value = MemberRemovedEvent.class, name = Event.MEMBER_REMOVED_GROUP)
 })
 public abstract class Event extends JacksonObject {
     
@@ -37,7 +39,9 @@ public abstract class Event extends JacksonObject {
     public final static String GROUP_NAME_CHANGE = "group.name_change";
     public final static String GROUP_TOPIC_CHANGE = "group.topic_change";
     
+    public final static String MEMBER_ADDED_GROUP = "membership.announce.added";
     public final static String MEMBER_EXITED_CHAT = "membership.notifications.exited";
+    public final static String MEMBER_REMOVED_GROUP = "membership.notifications.removed";
     
     @Getter @Setter
     @JsonProperty("type")

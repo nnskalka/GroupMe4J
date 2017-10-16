@@ -43,7 +43,7 @@ public class GroupMe4JGroupMessagesTest extends GroupMe4JClientTest {
     
     @Test
     public void testGetMessageForGroup() throws GroupMeAPIException {
-        final int NUMBER_OF_GROUPS = 10;
+        final int NUMBER_OF_GROUPS = 15;
 
         // Getting a group chat that was not just created
         List<Group> groups = groupme.getGroups(1, NUMBER_OF_GROUPS);
