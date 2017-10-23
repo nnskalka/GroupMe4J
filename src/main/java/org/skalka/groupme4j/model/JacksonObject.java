@@ -6,10 +6,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.HashMap;
 import java.util.Map;
+import lombok.ToString;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class JacksonObject {
 

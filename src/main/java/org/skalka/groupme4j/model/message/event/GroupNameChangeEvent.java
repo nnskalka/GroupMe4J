@@ -15,6 +15,10 @@ public class GroupNameChangeEvent extends Event {
     public class GroupNameChangeEventData extends JacksonObject {
 
         @Getter @Setter
+        @JsonProperty("name")
+        private String name;
+        
+        @Getter @Setter
         @JsonProperty("user")
         private EventUser user;
 

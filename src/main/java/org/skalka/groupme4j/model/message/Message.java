@@ -5,14 +5,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
 import org.skalka.groupme4j.model.JacksonObject;
 import org.skalka.groupme4j.model.message.attachment.Attachment;
 
+@ToString
 public abstract class Message extends JacksonObject {
     
     @Getter @Setter
     @JsonProperty("attachments")
-    private List<Attachment> attachments = null;
+    private List<Attachment> attachments;
 
     @Getter @Setter
     @JsonProperty("avatar_url")
@@ -28,11 +32,15 @@ public abstract class Message extends JacksonObject {
     
     @Getter @Setter
     @JsonProperty("favorited_by")
-    private List<Object> favoritedBy = null;
+    private List<Object> favoritedBy;
 
     @Getter @Setter
     @JsonProperty("id")
     private String id;
+    
+    @Getter
+    @JsonProperty("liked_at")
+    private DateTime likedAt;
     
     @Getter @Setter
     @JsonProperty("name")
@@ -57,5 +65,14 @@ public abstract class Message extends JacksonObject {
     @Getter @Setter
     @JsonProperty("user_id")
     private String userId;
+    
+    @JsonProperty("liked_at")
+    public void setLikedAt(String dateTime) {
+        this.likedAt = DateTime.parse(dateTime, ISODateTimeFormat.dateTimeParser());
+    }
+    
+    public void setLikedAt(DateTime dateTime) {
+        this.likedAt = dateTime;
+    }
     
 }

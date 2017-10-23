@@ -27,12 +27,22 @@ public class WebEndpoints {
     
     public final static String MESSAGES_CREATE = MESSAGES;
     
+    public final static String MESSAGES_LIKE = BASE_URL + "/messages/%s/%s/like";
+    
+    public final static String MESSAGES_UNLIKE = BASE_URL + "/messages/%s/%s/unlike";
+    
     
     public final static String CHATS = BASE_URL + "/chats";
     
     
     public final static String DIRECT_MESSAGES = BASE_URL + "/direct_messages";
     
+    
+    public final static String LEADERBOARD_INDEX = BASE_URL + "/groups/%s/likes";
+    
+    public final static String LEADERBOARD_MINE = LEADERBOARD_INDEX + "/mine";
+    
+    public final static String LEADERBOARD_HITS = LEADERBOARD_INDEX + "/for_me";
     
     public final static String BOT = BASE_URL + "/bots";
     
@@ -57,5 +67,10 @@ public class WebEndpoints {
     public final static String SMS_MODE_CREATE = SMS_MODE;
     
     public final static String SMS_MODE_DELETE = SMS_MODE + "/delete";
+    
+    
+    public final static String BLOCKS = BASE_URL + "/blocks";
+    
+    public final static String BLOCKS_BETWEEN = BLOCKS + "/between";
     
 }

@@ -4,9 +4,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.skalka.groupme4j.exception.GroupMeAPIException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.skalka.groupme4j.exception.GroupMeAPIException;
 import org.skalka.groupme4j.internal.converter.RequestConverter;
 import org.skalka.groupme4j.internal.converter.ResponseConverter;
 import org.skalka.groupme4j.internal.request.CreateBotRequest;
@@ -23,6 +25,10 @@ import org.skalka.groupme4j.internal.requestor.HttpRequestorFactory;
 import org.skalka.groupme4j.internal.response.CreateDirectMessageResponse;
 import org.skalka.groupme4j.internal.response.CreateGroupMessageResponse;
 import org.skalka.groupme4j.internal.response.GroupMeResponse;
+
+import org.skalka.groupme4j.model.block.Block;
+import org.skalka.groupme4j.model.block.BlockBetween;
+import org.skalka.groupme4j.model.block.Blocks;
 import org.skalka.groupme4j.model.bot.Bot;
 import org.skalka.groupme4j.model.chat.Chat;
 import org.skalka.groupme4j.model.group.Group;
@@ -255,8 +261,36 @@ public class GroupMe4JClient {
     }
 
     // LIKES
-    // LEADERBOARD
+    public boolean likeMessage(String groupId, String messageId) {
+        return post(String.format(WebEndpoints.MESSAGES_LIKE, groupId, messageId), "").contains("200");
+    }
     
+    public boolean unlikeMessage(String groupId, String messageId) {
+        return post(String.format(WebEndpoints.MESSAGES_UNLIKE, groupId, messageId), "").isEmpty();
+    }
+    
+    // LEADERBOARD
+    public List<GroupMessage> getGroupLikes(String groupId, String timePeriod) throws GroupMeAPIException {
+        Map<String, Object> queries = new HashMap<String, Object>();
+        queries.put("period", timePeriod);
+        queries.put("token", token);
+        
+        return get(GroupMessages.class, String.format(WebEndpoints.LEADERBOARD_INDEX, groupId), queries).getMessages();
+    }
+    
+    public List<GroupMessage> getMyGroupLikes(String groupId) throws GroupMeAPIException {
+        Map<String, Object> queries = new HashMap<String, Object>();
+        queries.put("token", token);
+        
+        return get(GroupMessages.class, String.format(WebEndpoints.LEADERBOARD_MINE, groupId), queries).getMessages();
+    }
+    
+    public List<GroupMessage> getMyGroupHits(String groupId) throws GroupMeAPIException {
+        Map<String, Object> queries = new HashMap<String, Object>();
+        queries.put("token", token);
+        
+        return get(GroupMessages.class, String.format(WebEndpoints.LEADERBOARD_HITS, groupId), queries).getMessages();
+    }
     
     // BOTS
     public Bot createBot(String name, String groupId) throws GroupMeAPIException {
@@ -340,6 +374,27 @@ public class GroupMe4JClient {
     }
 
     // BLOCKS
+    public List<Block> getBlocks() throws GroupMeAPIException {
+        User me = getMe();
+        
+        Map<String, Object> queries = new HashMap<String, Object>();
+        queries.put("user", me.getId());
+        queries.put("token", token);
+        
+        return get(Blocks.class, WebEndpoints.BLOCKS, queries).getBlocks();
+    }
+    
+    public BlockBetween getBlockBetween(String otherId) throws GroupMeAPIException {
+        User me = getMe();
+        
+        Map<String, Object> queries = new HashMap<String, Object>();
+        queries.put("user", me.getId());
+        queries.put("otherUser", otherId);
+        queries.put("token", token);
+        
+        return get(BlockBetween.class, WebEndpoints.BLOCKS_BETWEEN, queries);
+    }
+    
     // Utility Methods for GroupmeClient
     private <RESPONSE> RESPONSE get(Class<RESPONSE> returnType, String url, Map<String, Object> queries) throws GroupMeAPIException {
         HttpRequestor requestor = HttpRequestorFactory.getDefaultRequestor();

@@ -21,7 +21,8 @@ import org.skalka.groupme4j.model.JacksonObject;
   @Type(value = LocationAttachment.class, name = Attachment.LOCATION_TYPE),
   @Type(value = MentionsAttachment.class, name = Attachment.MENTIONS_TYPE),
   @Type(value = PostprocessingAttachment.class, name = Attachment.POSTPROCESSING_TYPE),
-  @Type(value = SplitAttachment.class, name = Attachment.SPLIT_TYPE)
+  @Type(value = SplitAttachment.class, name = Attachment.SPLIT_TYPE),
+  @Type(value = VideoAttachment.class, name = Attachment.VIDEO_TYPE)
 })
 public abstract class Attachment extends JacksonObject {
 
@@ -34,7 +35,8 @@ public abstract class Attachment extends JacksonObject {
     public final static String MENTIONS_TYPE = "mentions";
     public final static String POSTPROCESSING_TYPE = "postprocessing";
     public final static String SPLIT_TYPE = "split";
-
+    public final static String VIDEO_TYPE = "video";
+    
     @Getter @Setter
     @JsonProperty("type")
     private String type;
