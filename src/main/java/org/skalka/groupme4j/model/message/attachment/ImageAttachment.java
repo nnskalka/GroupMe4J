@@ -14,4 +14,9 @@ public class ImageAttachment extends Attachment {
     @JsonProperty("url")
     private String url;
 
+    public ImageAttachment() {
+        super();
+        setType(AttachmentType.Image);
+    }
+    
 }

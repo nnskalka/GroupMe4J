@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.skalka.groupme4j.model.message.DirectMessage;
+import org.skalka.groupme4j.model.bot.Bot;
 
 @ToString
-public class CreateDirectMessageResponse {
+public class CreateBotResponse {
 
     @Getter @Setter
-    @JsonProperty("direct_message")
-    private DirectMessage message;
-    
+    @JsonProperty("bot")
+    private Bot bot;
+
 }

@@ -6,10 +6,18 @@ import lombok.Setter;
 import lombok.ToString;
 
 @ToString
-public class DestroyBotRequest {
+public class CreateBotMessageRequest {
 
     @Getter @Setter
     @JsonProperty("bot_id")
     private String botId;
-    
+
+    @Getter @Setter
+    @JsonProperty("text")
+    private String text;
+
+    @Getter @Setter
+    @JsonProperty("picture_url")
+    private String pictureUrl;
+
 }

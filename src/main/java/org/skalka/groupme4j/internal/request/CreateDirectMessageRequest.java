@@ -6,14 +6,17 @@ import java.util.List;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.skalka.groupme4j.model.message.attachment.Attachment;
 
+@ToString
 public class CreateDirectMessageRequest {
     
     @Getter @Setter
     @JsonProperty("direct_message")
     private MessageRequest directMessage;
     
+    @ToString
     public class MessageRequest {
         
         @Getter @Setter

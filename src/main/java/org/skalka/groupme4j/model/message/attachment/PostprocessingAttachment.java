@@ -10,5 +10,10 @@ public class PostprocessingAttachment extends Attachment {
     @Getter @Setter
     @JsonProperty("queues")
     private List<String> queues;
+
+    public PostprocessingAttachment() {
+        super();
+        setType(AttachmentType.Postprocessing);
+    }
     
 }

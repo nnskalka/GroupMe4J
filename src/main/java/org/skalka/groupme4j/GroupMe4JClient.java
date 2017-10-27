@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.skalka.groupme4j.exception.GroupMeAPIException;
 import org.skalka.groupme4j.internal.converter.RequestConverter;
 import org.skalka.groupme4j.internal.converter.ResponseConverter;
+import org.skalka.groupme4j.internal.request.CreateBotMessageRequest;
 import org.skalka.groupme4j.internal.request.CreateBotRequest;
 import org.skalka.groupme4j.internal.request.CreateDirectMessageRequest;
 import org.skalka.groupme4j.internal.request.CreateGroupMessageRequest;
@@ -22,6 +23,7 @@ import org.skalka.groupme4j.internal.request.UpdateGroupRequest;
 import org.skalka.groupme4j.internal.request.UpdateUserRequest;
 import org.skalka.groupme4j.internal.requestor.HttpRequestor;
 import org.skalka.groupme4j.internal.requestor.HttpRequestorFactory;
+import org.skalka.groupme4j.internal.response.CreateBotResponse;
 import org.skalka.groupme4j.internal.response.CreateDirectMessageResponse;
 import org.skalka.groupme4j.internal.response.CreateGroupMessageResponse;
 import org.skalka.groupme4j.internal.response.GroupMeResponse;
@@ -294,18 +296,41 @@ public class GroupMe4JClient {
     
     // BOTS
     public Bot createBot(String name, String groupId) throws GroupMeAPIException {
-        CreateBotRequest request = new CreateBotRequest();
-        request.setAvatarUrl("");
-        request.setCallbackUrl("");
-        request.setDmNotification(0);
-        request.setGroupId(groupId);
-        request.setName(name);
+        return createBot(name, groupId, "", "", false);
+    }
+    
+    public Bot createBot(String name, String groupId, String avatarUrl, String callbackUrl, Boolean dmNotification) throws GroupMeAPIException {
+        CreateBotRequest request = new CreateBotRequest() {{
+            setBot(new NewBot() {{
+                setAvatarUrl(avatarUrl);
+                setCallbackUrl(callbackUrl);
+                setDmNotification(dmNotification);
+                setGroupId(groupId);
+                setName(name);
+            }});
+        }};
         
         return createBot(request);
     }
     
     private Bot createBot(CreateBotRequest request) throws GroupMeAPIException {
-        return post(Bot.class, WebEndpoints.BOT_CREATE, request);
+        return post(CreateBotResponse.class, WebEndpoints.BOT_CREATE, request).getBot();
+    }
+    
+    public boolean postBotMessage(String botId, String text) {
+        CreateBotMessageRequest request = new CreateBotMessageRequest() {{
+            setBotId(botId);
+            setText(text);
+        }};
+        
+        return postBotMessage(request);
+    }
+    
+    private boolean postBotMessage(CreateBotMessageRequest request) {
+        RequestConverter<CreateBotMessageRequest> converter = new RequestConverter<>();
+        String json = converter.parseObjectRequest(request);
+        
+        return post(WebEndpoints.BOT_POST, json).isEmpty();
     }
     
     public List<Bot> getBots() throws GroupMeAPIException {

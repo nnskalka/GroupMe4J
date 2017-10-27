@@ -10,11 +10,11 @@ import org.skalka.groupme4j.model.JacksonObject;
 public class User extends JacksonObject {
     
     @Getter @Setter
-    @JsonProperty("created_at")
+    @JsonProperty(value = "created_at", required = true)
     private Integer createdAt;
     
     @Getter @Setter
-    @JsonProperty("email")
+    @JsonProperty(value = "email", required = true)
     private String email;
     
     @Getter @Setter
@@ -22,7 +22,7 @@ public class User extends JacksonObject {
     private Boolean facebookConnected;
     
     @Getter @Setter
-    @JsonProperty("id")
+    @JsonProperty(value = "id", required = true)
     private String id;
     
     @Getter @Setter
@@ -34,11 +34,11 @@ public class User extends JacksonObject {
     private String locale;
     
     @Getter @Setter
-    @JsonProperty("name")
+    @JsonProperty(value = "name", required = true)
     private String name;
     
     @Getter @Setter
-    @JsonProperty("phone_number")
+    @JsonProperty(value = "phone_number", required = true)
     private String phoneNumber;
     
     @Getter @Setter
@@ -54,7 +54,7 @@ public class User extends JacksonObject {
     private Integer updatedAt;
     
     @Getter @Setter
-    @JsonProperty("user_id")
+    @JsonProperty(value = "user_id", required = true)
     private String userId;
     
     @Getter @Setter

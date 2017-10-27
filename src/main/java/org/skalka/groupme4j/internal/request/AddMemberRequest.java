@@ -4,13 +4,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
+@ToString
 public class AddMemberRequest {
     
     @Getter @Setter
     @JsonProperty("direct_message")
     private List<AddedMember> directMessage;
     
+    @ToString
     public class AddedMember {
         
         @Getter @Setter

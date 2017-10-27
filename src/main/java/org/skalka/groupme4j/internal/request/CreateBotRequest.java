@@ -3,27 +3,36 @@ package org.skalka.groupme4j.internal.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
+@ToString
 public class CreateBotRequest {
     
     @Getter @Setter
-    @JsonProperty("bot[avatar_url]")
-    private String avatarUrl;
+    @JsonProperty("bot")
+    private NewBot bot;
     
-    @Getter @Setter
-    @JsonProperty("bot[callback_url]")
-    private String callbackUrl;
+    public class NewBot {
     
-    @Getter @Setter
-    @JsonProperty("bot[dm_notification]")
-    private Integer dmNotification;
+        @Getter @Setter
+        @JsonProperty("avatar_url")
+        private String avatarUrl;
 
-    @Getter @Setter
-    @JsonProperty("bot[group_id]")
-    private String groupId;
+        @Getter @Setter
+        @JsonProperty("callback_url")
+        private String callbackUrl;
+
+        @Getter @Setter
+        @JsonProperty("dm_notification")
+        private Boolean dmNotification;
+
+        @Getter @Setter
+        @JsonProperty("group_id")
+        private String groupId;
+
+        @Getter @Setter
+        @JsonProperty("name")
+        private String name;
     
-    @Getter @Setter
-    @JsonProperty("bot[name]")
-    private String name;
-    
+    }
 }

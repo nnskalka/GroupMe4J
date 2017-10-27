@@ -4,14 +4,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-public class LinkedImageAttachment extends Attachment {
-
-    @Getter @Setter
-    @JsonProperty("url")
-    private String url;
+public class PollAttachment extends Attachment {
     
-    public LinkedImageAttachment() {
+    @Getter @Setter
+    @JsonProperty("poll_id")
+    private String pollId;
+    
+    public PollAttachment() {
         super();
-        setType(AttachmentType.LinkedImage);
+        setType(AttachmentType.Poll);
     }
+    
 }

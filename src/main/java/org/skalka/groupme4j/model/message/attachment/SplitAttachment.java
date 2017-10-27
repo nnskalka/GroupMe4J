@@ -10,4 +10,9 @@ public class SplitAttachment extends Attachment {
     @JsonProperty("token")
     private String token;
 
+    public SplitAttachment() {
+        super();
+        setType(AttachmentType.Split);
+    }
+    
 }

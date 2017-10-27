@@ -16,4 +16,9 @@ public class EmojiAttachment extends Attachment {
     @JsonProperty("charmap")
     private List<List<Integer>> charmap;
 
+    public EmojiAttachment() {
+        super();
+        setType(AttachmentType.Emoji);
+    }
+    
 }

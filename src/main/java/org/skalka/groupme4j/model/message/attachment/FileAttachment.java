@@ -10,4 +10,9 @@ public class FileAttachment extends Attachment {
     @JsonProperty("file_id")
     private String fileId;
     
+    public FileAttachment() {
+        super();
+        setType(AttachmentType.File);
+    }
+    
 }

@@ -14,4 +14,9 @@ public class EventAttachment extends Attachment {
     @JsonProperty("view")
     private String view;
     
+    public EventAttachment() {
+        super();
+        setType(AttachmentType.Event);
+    }
+    
 }

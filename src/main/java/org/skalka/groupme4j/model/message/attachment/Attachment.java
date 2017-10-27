@@ -13,32 +13,22 @@ import org.skalka.groupme4j.model.JacksonObject;
   include = JsonTypeInfo.As.PROPERTY, 
   property = "type")
 @JsonSubTypes({
-  @Type(value = EmojiAttachment.class, name = Attachment.EMOJI_TYPE),
-  @Type(value = EventAttachment.class, name = Attachment.EVENT_TYPE),
-  @Type(value = FileAttachment.class, name = Attachment.FILE_TYPE),
-  @Type(value = ImageAttachment.class, name = Attachment.IMAGE_TYPE),
-  @Type(value = LinkedImageAttachment.class, name = Attachment.LINKED_IMAGE_TYPE),
-  @Type(value = LocationAttachment.class, name = Attachment.LOCATION_TYPE),
-  @Type(value = MentionsAttachment.class, name = Attachment.MENTIONS_TYPE),
-  @Type(value = PostprocessingAttachment.class, name = Attachment.POSTPROCESSING_TYPE),
-  @Type(value = SplitAttachment.class, name = Attachment.SPLIT_TYPE),
-  @Type(value = VideoAttachment.class, name = Attachment.VIDEO_TYPE)
+  @Type(value = EmojiAttachment.class, name = AttachmentType.EMOJI_TYPE),
+  @Type(value = EventAttachment.class, name = AttachmentType.EVENT_TYPE),
+  @Type(value = FileAttachment.class, name = AttachmentType.FILE_TYPE),
+  @Type(value = ImageAttachment.class, name = AttachmentType.IMAGE_TYPE),
+  @Type(value = LinkedImageAttachment.class, name = AttachmentType.LINKED_IMAGE_TYPE),
+  @Type(value = LocationAttachment.class, name = AttachmentType.LOCATION_TYPE),
+  @Type(value = MentionsAttachment.class, name = AttachmentType.MENTIONS_TYPE),
+  @Type(value = PollAttachment.class, name = AttachmentType.POLL_TYPE),
+  @Type(value = PostprocessingAttachment.class, name = AttachmentType.POSTPROCESSING_TYPE),
+  @Type(value = SplitAttachment.class, name = AttachmentType.SPLIT_TYPE),
+  @Type(value = VideoAttachment.class, name = AttachmentType.VIDEO_TYPE)
 })
 public abstract class Attachment extends JacksonObject {
 
-    public final static String EMOJI_TYPE = "emoji";
-    public final static String EVENT_TYPE = "event";
-    public final static String FILE_TYPE = "file";
-    public final static String IMAGE_TYPE = "image";
-    public final static String LINKED_IMAGE_TYPE = "linked_image";
-    public final static String LOCATION_TYPE = "location";
-    public final static String MENTIONS_TYPE = "mentions";
-    public final static String POSTPROCESSING_TYPE = "postprocessing";
-    public final static String SPLIT_TYPE = "split";
-    public final static String VIDEO_TYPE = "video";
-    
     @Getter @Setter
-    @JsonProperty("type")
-    private String type;
+    @JsonProperty(value = "type", required = true)
+    private AttachmentType type;
 
 }

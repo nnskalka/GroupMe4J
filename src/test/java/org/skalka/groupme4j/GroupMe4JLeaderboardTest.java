@@ -21,7 +21,7 @@ public class GroupMe4JLeaderboardTest extends GroupMe4JClientTest {
         super.setup();
         
         try {
-            group = groupme.getGroups(1, 1).get(0);
+            group = groupme.getGroups(1, 2).get(1);
         } catch (GroupMeAPIException ex) {
             Logger.getLogger(GroupMe4JGroupMessagesTest.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -14,5 +14,10 @@ public class MentionsAttachment extends Attachment {
     @Getter @Setter
     @JsonProperty("user_ids")
     private List<String> userIds = null;
+
+    public MentionsAttachment() {
+        super();
+        setType(AttachmentType.Mentions);
+    }
     
 }

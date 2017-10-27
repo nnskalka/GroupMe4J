@@ -17,10 +17,8 @@ repositories {
     jcenter()
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
 dependencies {
+    // COMPILE
     // Logging
     compile("org.slf4j:slf4j-api:1.7.5")
 
@@ -33,9 +31,14 @@ dependencies {
     // Joda DateTime
     compile group: 'joda-time', name: 'joda-time', version: '2.3'
     
+    
+    // TESTING
     // Unit Testing
     testCompile("junit:junit:4.12")
+    
+    // Test Logging
     testCompile("org.slf4j:slf4j-simple:1.7.25")
-    testCompile("org.mockito:mockito-core:2.8.47")
+
+    // Pojo Testing
     testCompile("com.openpojo:openpojo:0.8.6")
 }

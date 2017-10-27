@@ -44,6 +44,7 @@ public class WebEndpoints {
     
     public final static String LEADERBOARD_HITS = LEADERBOARD_INDEX + "/for_me";
     
+    
     public final static String BOT = BASE_URL + "/bots";
     
     public final static String BOT_INDEX = BOT;

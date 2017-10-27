@@ -20,8 +20,7 @@ public class LocationAttachment extends Attachment {
     
     public LocationAttachment() {
         super();
-        
-        setType(Attachment.LOCATION_TYPE);
+        setType(AttachmentType.Location);
     }
 
 }
