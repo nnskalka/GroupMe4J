@@ -17,29 +17,6 @@ import org.skalka.groupme4j.model.message.attachment.Attachment;
 import org.skalka.groupme4j.model.message.attachment.LocationAttachment;
 
 public class GroupMe4JGroupMessagesTest extends GroupMe4JClientTest {
-
-    Group cGroup = null;
-    
-    @Before
-    @Override
-    public void setup() throws IOException {
-        super.setup();
-        
-        try {
-            cGroup = groupme.createGroup("TESTER GROUP");
-        } catch (GroupMeAPIException ex) {
-            Logger.getLogger(GroupMe4JGroupMessagesTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        Assert.assertNotNull(cGroup);
-        Assert.assertNotNull(cGroup.getGroupId());
-    }
-    
-    @After
-    public void tearDown() {
-        boolean deleted = groupme.destoryGroup(cGroup.getGroupId());
-        Assert.assertTrue(deleted);
-    }
     
     @Test
     public void testGetMessageForGroup() throws GroupMeAPIException {

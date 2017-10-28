@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.skalka.groupme4j.exception.GroupMeAPIException;
 import org.skalka.groupme4j.model.bot.Bot;
 
-public class GroupMe4JBotTest extends GroupMe4JGroupMessagesTest {
+public class GroupMe4JBotTest extends GroupMe4JClientTest {
     
     @Test
     public void testGetBots() throws GroupMeAPIException {
