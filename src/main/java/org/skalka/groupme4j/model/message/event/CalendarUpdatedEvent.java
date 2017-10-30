@@ -1,29 +1,36 @@
 package org.skalka.groupme4j.model.message.event;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
-import lombok.Getter;
-import lombok.Setter;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 import org.skalka.groupme4j.model.JacksonObject;
 import org.skalka.groupme4j.model.user.EventUser;
 
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class CalendarUpdatedEvent extends Event {
-
-    @Getter @Setter
+    
     @JsonProperty("data")
     private CalendarUpdatedEventData data;
     
+    
+    @Data
+    @NoArgsConstructor
+    @EqualsAndHashCode(callSuper = true)
     public class CalendarUpdatedEventData extends JacksonObject {
         
-        @Getter @Setter
         @JsonProperty("event")
         private CalendarEvent event;
 
-        @Getter @Setter
         @JsonProperty("updated_fields")
         private List<String> updatedFields;
         
-        @Getter @Setter
         @JsonProperty("user")
         private EventUser user;
         

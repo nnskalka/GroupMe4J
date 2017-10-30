@@ -1,71 +1,65 @@
 package org.skalka.groupme4j.model.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+
 import org.skalka.groupme4j.model.JacksonObject;
 
-@ToString
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class User extends JacksonObject {
     
-    @Getter @Setter
+    @NonNull
     @JsonProperty(value = "created_at", required = true)
     private Integer createdAt;
     
-    @Getter @Setter
+    @NonNull
     @JsonProperty(value = "email", required = true)
     private String email;
     
-    @Getter @Setter
     @JsonProperty("facebook_connected")
     private Boolean facebookConnected;
     
-    @Getter @Setter
+    @NonNull
     @JsonProperty(value = "id", required = true)
     private String id;
     
-    @Getter @Setter
     @JsonProperty("image_url")
     private String imageUrl;
     
-    @Getter @Setter
     @JsonProperty("locale")
     private String locale;
     
-    @Getter @Setter
+    @NonNull
     @JsonProperty(value = "name", required = true)
     private String name;
     
-    @Getter @Setter
+    @NonNull
     @JsonProperty(value = "phone_number", required = true)
     private String phoneNumber;
     
-    @Getter @Setter
     @JsonProperty("sms")
     private Boolean sms;
     
-    @Getter @Setter
     @JsonProperty("twitter_connected")
     private Boolean twitterConnected;
     
-    @Getter @Setter
     @JsonProperty("updated_at")
     private Integer updatedAt;
     
-    @Getter @Setter
+    @NonNull
     @JsonProperty(value = "user_id", required = true)
     private String userId;
     
-    @Getter @Setter
     @JsonProperty("zip_code")
     private String zipCode;
     
-    @Getter @Setter
     @JsonProperty("share_url")
     private String shareUrl;
     
-    @Getter @Setter
     @JsonProperty("share_qr_code_url")
     private String shareQrCodeUrl;
     

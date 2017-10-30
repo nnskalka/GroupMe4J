@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import lombok.ToString;
 
 import org.slf4j.Logger;
@@ -27,7 +28,7 @@ public abstract class JacksonObject {
     public void set(String name, Object value) {
         LOGGER.debug("Unknown Property '{}' was registered with Value '{}'",
                 name, (value != null) ? value.toString() : "null");
-        
+
         getMap().put(name, value);
     }
 
@@ -35,5 +36,5 @@ public abstract class JacksonObject {
         return (otherProperties != null) ? otherProperties
                 : (otherProperties = new HashMap<String, Object>());
     }
-    
+
 }

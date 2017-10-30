@@ -1,18 +1,19 @@
 package org.skalka.groupme4j.model.message.attachment;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class EmojiAttachment extends Attachment {
 
-    @Getter @Setter
     @JsonProperty("placeholder")
     private String placeholder;
 
-    @Getter @Setter
     @JsonProperty("charmap")
     private List<List<Integer>> charmap;
 

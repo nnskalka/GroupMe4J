@@ -1,20 +1,20 @@
 package org.skalka.groupme4j.model.message.attachment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.Setter;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class LocationAttachment extends Attachment {
 
-    @Getter @Setter
     @JsonProperty("lat")
     private String latitude;
 
-    @Getter @Setter
     @JsonProperty("lng")
     private String longitude;
 
-    @Getter @Setter
     @JsonProperty("name")
     private String name;
     

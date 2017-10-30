@@ -1,12 +1,14 @@
 package org.skalka.groupme4j.model.message.attachment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.Setter;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class PollAttachment extends Attachment {
     
-    @Getter @Setter
     @JsonProperty("poll_id")
     private String pollId;
     

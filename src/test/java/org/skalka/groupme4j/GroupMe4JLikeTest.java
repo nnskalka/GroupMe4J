@@ -7,8 +7,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.skalka.groupme4j.exception.GroupMeAPIException;
-import org.skalka.groupme4j.model.group.Group;
-import org.skalka.groupme4j.model.group.PreviewGroupMessage;
 import org.skalka.groupme4j.model.message.GroupMessage;
 
 public class GroupMe4JLikeTest extends GroupMe4JClientTest {

@@ -1,12 +1,14 @@
 package org.skalka.groupme4j.model.message.attachment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.Setter;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class SplitAttachment extends Attachment {
 
-    @Getter @Setter
     @JsonProperty("token")
     private String token;
 
