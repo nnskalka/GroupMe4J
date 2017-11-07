@@ -6,6 +6,7 @@ import org.skalka.groupme4j.exception.GroupMeAPIException;
 import org.skalka.groupme4j.model.chat.Chat;
 import org.skalka.groupme4j.model.message.DirectMessage;
 import org.skalka.groupme4j.model.message.DirectMessages;
+import java.util.List;
 
 public class Groupme4JDirectMessagesTest extends GroupMe4JClientTest {
 
@@ -26,7 +27,16 @@ public class Groupme4JDirectMessagesTest extends GroupMe4JClientTest {
 
     @Test
     public void testSendDirectMessage_NoAttachment() throws GroupMeAPIException {
-        DirectMessage dm = groupme.postDirectMessage("51022126", "THIS IS A TEST");
+        List<Chat> chats = groupme.getChats(1,25);
+        String userId = "fail";
+        
+        for (Chat chat : chats) {
+            if (chat.getOtherUser().getName().equals("Nathan Skalka")) {
+                userId = chat.getOtherUser().getId();
+            }
+        }
+        
+        DirectMessage dm = groupme.postDirectMessage(userId, "THIS IS A TEST");
 
         Assert.assertNotNull(dm);
         Assert.assertNotNull(dm.getText());
