@@ -18,7 +18,10 @@ public class RequestConverter<T> {
 
         try {
             json = mapper.writeValueAsString(object).trim();
-            LOGGER.trace("Attempting to convert object to string: {}", json);
+            
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace("Attempting to convert object to string: {}", json);
+            }
         } catch (JsonParseException JPE) {
             LOGGER.error("Failure to parse object input, check syntax;{}", JPE.getMessage());
         } catch (JsonMappingException JME) {

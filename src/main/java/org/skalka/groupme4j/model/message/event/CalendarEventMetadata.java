@@ -11,12 +11,12 @@ import org.skalka.groupme4j.model.JacksonObject;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class CalendarEvent extends JacksonObject {
+public class CalendarEventMetadata extends JacksonObject {
 
     @JsonProperty("id")
     private String id;
-    
+
     @JsonProperty("name")
     private String name;
-    
+
 }

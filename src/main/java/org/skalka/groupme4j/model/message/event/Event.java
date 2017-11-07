@@ -13,6 +13,7 @@ import org.skalka.groupme4j.model.JacksonObject;
   include = JsonTypeInfo.As.PROPERTY, 
   property = "type")
 @JsonSubTypes({
+  @Type(value = CalendarCancelledEvent.class, name = EventType.CALENDAR_CANCELLED),
   @Type(value = CalendarCreatedEvent.class, name = EventType.CALENDAR_CREATED),
   @Type(value = CalendarUpdatedEvent.class, name = EventType.CALENDAR_UPDATED),
   @Type(value = CalendarUserDeclinedEvent.class, name = EventType.CALENDAR_USER_DECLINED),
@@ -27,10 +28,14 @@ import org.skalka.groupme4j.model.JacksonObject;
   
   @Type(value = MemberAddedEvent.class, name = EventType.MEMBER_ADDED_GROUP),
   @Type(value = MemberExitedEvent.class, name = EventType.MEMBER_EXITED_CHAT),
-  @Type(value = MemberRemovedEvent.class, name = EventType.MEMBER_REMOVED_GROUP)
+  @Type(value = MemberRemovedEvent.class, name = EventType.MEMBER_REMOVED_GROUP),
+  
+  @Type(value = PollCreatedEvent.class, name = EventType.POLL_CREATED),
+  @Type(value = PollEndedEvent.class, name = EventType.POLL_ENDED),
+  @Type(value = PollReminderEvent.class, name = EventType.POLL_REMINDER)
 })
 public abstract class Event extends JacksonObject {
-        
+    
     @Getter @Setter
     @JsonProperty("type")
     private String type;

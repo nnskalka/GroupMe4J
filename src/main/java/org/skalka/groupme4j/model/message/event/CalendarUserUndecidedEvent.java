@@ -23,7 +23,7 @@ public class CalendarUserUndecidedEvent extends Event {
     public class CalendarUserUndecidedEventData extends JacksonObject {
         
         @JsonProperty("event")
-        private CalendarEvent event;
+        private CalendarEventMetadata event;
 
         @JsonProperty("user")
         private EventUser user;

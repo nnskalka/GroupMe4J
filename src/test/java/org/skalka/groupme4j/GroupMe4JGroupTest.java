@@ -9,10 +9,10 @@ public class GroupMe4JGroupTest extends GroupMe4JClientTest {
 
     @Test
     public void testGroups() throws Exception {
-        List<Group> groups = groupme.getGroups(1, 1);
+        List<Group> groups = groupme.getGroups(1, 5);
 
         Assert.assertNotNull(groups);
-        Assert.assertEquals(1, groups.size());
+        Assert.assertEquals(5, groups.size());
     }
 
     @Test

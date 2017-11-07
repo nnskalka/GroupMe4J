@@ -11,6 +11,9 @@ public enum EventType {
     BotDeleted,
     
     
+    @JsonProperty(EventType.CALENDAR_CANCELLED)
+    CalendarCancelled,
+    
     @JsonProperty(EventType.CALENDAR_CREATED)
     CalendarCreated,
     
@@ -25,6 +28,13 @@ public enum EventType {
     
     @JsonProperty(EventType.CALENDAR_USER_UNDECIDED)
     CalendarUserUndecided,
+    
+    
+    @JsonProperty(EventType.GROUP_NAME_CHANGE)
+    GroupNameChanged,
+    
+    @JsonProperty(EventType.GROUP_TOPIC_CHANGE)
+    GroupTopicChanged,
 
     
     @JsonProperty(EventType.MEMBER_ADDED_GROUP)
@@ -37,11 +47,14 @@ public enum EventType {
     MemberRemovedGroup,
     
     
-    @JsonProperty(EventType.GROUP_NAME_CHANGE)
-    GroupNameChanged,
+    @JsonProperty(EventType.POLL_CREATED)
+    PollCreated,
     
-    @JsonProperty(EventType.GROUP_TOPIC_CHANGE)
-    GroupTopicChanged;
+    @JsonProperty(EventType.POLL_ENDED)
+    PollEnded,
+    
+    @JsonProperty(EventType.POLL_REMINDER)
+    PollReminder;
     
     
     public static final String BOT_ADDED = "bot.add";
@@ -49,15 +62,20 @@ public enum EventType {
     
     public static final String CALENDAR_CREATED = "calendar.event.created";
     public static final String CALENDAR_UPDATED = "calendar.event.updated";
+    public final static String CALENDAR_CANCELLED = "calendar.event.cancelled";
     public static final String CALENDAR_USER_DECLINED = "calendar.event.user.not_going";
     public static final String CALENDAR_USER_GOING = "calendar.event.user.going";
     public static final String CALENDAR_USER_UNDECIDED = "calendar.event.user.undecided";
+    
+    public static final String GROUP_NAME_CHANGE = "group.name_change";
+    public static final String GROUP_TOPIC_CHANGE = "group.topic_change";
     
     public static final String MEMBER_ADDED_GROUP = "membership.announce.added";
     public static final String MEMBER_EXITED_CHAT = "membership.notifications.exited";
     public static final String MEMBER_REMOVED_GROUP = "membership.notifications.removed";
     
-    public static final String GROUP_NAME_CHANGE = "group.name_change";
-    public static final String GROUP_TOPIC_CHANGE = "group.topic_change";
+    public final static String POLL_CREATED = "poll.created";
+    public final static String POLL_ENDED = "poll.finished";
+    public final static String POLL_REMINDER = "poll.reminder";
     
 }

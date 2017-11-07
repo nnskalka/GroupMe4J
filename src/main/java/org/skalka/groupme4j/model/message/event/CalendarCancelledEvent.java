@@ -14,21 +14,18 @@ import org.skalka.groupme4j.model.user.EventUser;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class CalendarUpdatedEvent extends Event {
-    
+public class CalendarCancelledEvent extends Event {
+
     @JsonProperty("data")
-    private CalendarUpdatedEventData data;
+    private CalendarCancelledEventData data;
     
     @Data
     @NoArgsConstructor
     @EqualsAndHashCode(callSuper = true)
-    public class CalendarUpdatedEventData extends JacksonObject {
+    public class CalendarCancelledEventData extends JacksonObject {
         
         @JsonProperty("event")
         private CalendarEventMetadata event;
-
-        @JsonProperty("updated_fields")
-        private List<String> updatedFields;
         
         @JsonProperty("user")
         private EventUser user;

@@ -23,7 +23,7 @@ public class CalendarCreatedEvent extends Event {
     public class CalendarCreatedEventData extends JacksonObject {
         
         @JsonProperty("event")
-        private CalendarEvent event;
+        private CalendarEventMetadata event;
 
         @JsonProperty("url")
         private String url;

@@ -44,7 +44,6 @@ import org.skalka.groupme4j.model.user.User;
 public class GroupMe4JClient {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(GroupMe4JClient.class);
-
     private final String token;
 
     public GroupMe4JClient(String token) {
@@ -204,7 +203,7 @@ public class GroupMe4JClient {
         return getChats(null, null);
     }
 
-    public List<Chat> getChats(Integer page, Integer per_page) throws GroupMeAPIException {
+    public List<Chat> getChats(Integer page, Integer per_page) throws GroupMeAPIException {        
         Map<String, Object> queries = new HashMap<String, Object>();
         queries.put("token", token);
         queries.put("page", (page != null) ? page : 1);
@@ -420,7 +419,7 @@ public class GroupMe4JClient {
         return get(BlockBetween.class, WebEndpoints.BLOCKS_BETWEEN, queries);
     }
     
-    // Utility Methods for GroupmeClient
+    // Utility Methods for GroupMeClient
     private <RESPONSE> RESPONSE get(Class<RESPONSE> returnType, String url, Map<String, Object> queries) throws GroupMeAPIException {
         HttpRequestor requestor = HttpRequestorFactory.getDefaultRequestor();
         LOGGER.debug("Connecting to url (GET): {}", url);

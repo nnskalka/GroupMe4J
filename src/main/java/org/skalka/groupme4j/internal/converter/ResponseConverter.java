@@ -26,9 +26,15 @@ public class ResponseConverter<T> {
         GroupMeResponse<T> response = null;
 
         try {
-            LOGGER.trace("Attempting to convert json string: {}", json);
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace("Attempting to convert json string: {}", json);
+            }
+            
             response = mapper.readValue(json, type);
-            LOGGER.trace("Converted json to object: {}", response);
+            
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace("Converted json to object: {}", response);
+            }
         } catch (JsonParseException JPE) {
             LOGGER.error("Failure to parse json input, checck syntax;{}", JPE.getMessage());
         } catch (JsonMappingException JME) {

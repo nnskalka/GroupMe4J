@@ -6,28 +6,27 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import org.skalka.groupme4j.model.JacksonObject;
+import org.skalka.groupme4j.model.chat.Conversation;
+import org.skalka.groupme4j.model.poll.Poll;
 import org.skalka.groupme4j.model.user.EventUser;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class CalendarUserGoingEvent extends Event {
+public class PollCreatedEvent extends Event {
 
     @JsonProperty("data")
-    private CalendarUserGoingEventData data;
-    
-    @Data
-    @NoArgsConstructor
-    @EqualsAndHashCode(callSuper = true)
-    public class CalendarUserGoingEventData extends JacksonObject {
-        
-        @JsonProperty("event")
-        private CalendarEventMetadata event;
+    private PollEndedEventData data;
+
+    public class PollEndedEventData {
+
+        @JsonProperty("conversation")
+        private Conversation conversation;
+
+        @JsonProperty("poll")
+        private Poll poll;
 
         @JsonProperty("user")
         private EventUser user;
-        
     }
-    
 }
