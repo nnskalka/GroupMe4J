@@ -325,6 +325,16 @@ public class GroupMe4JClient {
         return postBotMessage(request);
     }
     
+    public boolean postBotMessage(String botId, String text, List<Attachment> attachments) {
+        CreateBotMessageRequest request = new CreateBotMessageRequest() {{
+            setAttachments(attachments);
+            setBotId(botId);
+            setText(text);
+        }};
+        
+        return postBotMessage(request);
+    }
+    
     private boolean postBotMessage(CreateBotMessageRequest request) {
         RequestConverter<CreateBotMessageRequest> converter = new RequestConverter<>();
         String json = converter.parseObjectRequest(request);

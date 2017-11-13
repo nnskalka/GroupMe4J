@@ -1,9 +1,14 @@
 package org.skalka.groupme4j.internal.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import org.skalka.groupme4j.model.message.attachment.Attachment;
 
 @ToString
 public class CreateBotMessageRequest {
@@ -17,7 +22,7 @@ public class CreateBotMessageRequest {
     private String text;
 
     @Getter @Setter
-    @JsonProperty("picture_url")
-    private String pictureUrl;
+    @JsonProperty("attachments")
+    private List<Attachment> attachments;
 
 }
