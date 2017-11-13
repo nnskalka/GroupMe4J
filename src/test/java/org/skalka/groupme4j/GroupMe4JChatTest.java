@@ -10,19 +10,9 @@ public class GroupMe4JChatTest extends GroupMe4JClientTest {
     
     @Test
     public void testGetChats() throws GroupMeAPIException, InterruptedException {
-        List<Chat> chats = groupme.getChats(1, 4);
+        List<Chat> chats = groupme.getChats(1, 3);
         
         Assert.assertEquals(3, chats.size());
-        Assert.assertNotNull(chats.get(0));
-        
-        chats = groupme.getChats(1, 3);
-        
-        Assert.assertEquals(3, chats.size());
-        Assert.assertNotNull(chats.get(0));
-        
-        chats = groupme.getChats(1, 2);
-        
-        Assert.assertEquals(2, chats.size());
         Assert.assertNotNull(chats.get(0));
         
         chats = groupme.getChats(1, 1);
