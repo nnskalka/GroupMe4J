@@ -26,6 +26,7 @@ import org.skalka.groupme4j.model.JacksonObject;
   
   @Type(value = GroupNameChangeEvent.class, name = EventType.GROUP_NAME_CHANGE),
   @Type(value = GroupTopicChangeEvent.class, name = EventType.GROUP_TOPIC_CHANGE),
+  @Type(value = GroupTypeChangeEvent.class, name = EventType.GROUP_TYPE_CHANGE),
   
   @Type(value = MemberAddedEvent.class, name = EventType.MEMBER_ADDED_GROUP),
   @Type(value = MemberExitedEvent.class, name = EventType.MEMBER_EXITED_CHAT),

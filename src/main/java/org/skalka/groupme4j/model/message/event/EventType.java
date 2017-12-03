@@ -38,6 +38,9 @@ public enum EventType {
     
     @JsonProperty(EventType.GROUP_TOPIC_CHANGE)
     GroupTopicChanged,
+    
+    @JsonProperty(EventType.GROUP_TYPE_CHANGE)
+    GroupTypeChanged,
 
     
     @JsonProperty(EventType.MEMBER_ADDED_GROUP)
@@ -73,6 +76,7 @@ public enum EventType {
     
     public static final String GROUP_NAME_CHANGE = "group.name_change";
     public static final String GROUP_TOPIC_CHANGE = "group.topic_change";
+    public static final String GROUP_TYPE_CHANGE = "group.type_change";
     
     public static final String MEMBER_ADDED_GROUP = "membership.announce.added";
     public static final String MEMBER_EXITED_CHAT = "membership.notifications.exited";
