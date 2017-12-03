@@ -35,7 +35,7 @@ import org.skalka.groupme4j.model.JacksonObject;
   @Type(value = PollEndedEvent.class, name = EventType.POLL_ENDED),
   @Type(value = PollReminderEvent.class, name = EventType.POLL_REMINDER)
 })
-public abstract class Event extends JacksonObject {
+public class Event extends JacksonObject {
     
     @Getter @Setter
     @JsonProperty("type")
