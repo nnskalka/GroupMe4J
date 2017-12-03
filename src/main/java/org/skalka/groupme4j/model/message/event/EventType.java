@@ -20,6 +20,9 @@ public enum EventType {
     @JsonProperty(EventType.CALENDAR_UPDATED)
     CalendarUpdated,
     
+    @JsonProperty(EventType.CALENDAR_STARTED)
+    CalendarStarted,
+    
     @JsonProperty(EventType.CALENDAR_USER_DECLINED)
     CalendarUserDeclined,
     
@@ -60,9 +63,10 @@ public enum EventType {
     public static final String BOT_ADDED = "bot.add";
     public static final String BOT_DELETED = "bot.del";
     
+    public final static String CALENDAR_CANCELLED = "calendar.event.cancelled";
     public static final String CALENDAR_CREATED = "calendar.event.created";
     public static final String CALENDAR_UPDATED = "calendar.event.updated";
-    public final static String CALENDAR_CANCELLED = "calendar.event.cancelled";
+    public static final String CALENDAR_STARTED = "calendar.event.starting";
     public static final String CALENDAR_USER_DECLINED = "calendar.event.user.not_going";
     public static final String CALENDAR_USER_GOING = "calendar.event.user.going";
     public static final String CALENDAR_USER_UNDECIDED = "calendar.event.user.undecided";

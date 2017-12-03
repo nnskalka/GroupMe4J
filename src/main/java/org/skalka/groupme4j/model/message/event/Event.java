@@ -16,6 +16,7 @@ import org.skalka.groupme4j.model.JacksonObject;
   @Type(value = CalendarCancelledEvent.class, name = EventType.CALENDAR_CANCELLED),
   @Type(value = CalendarCreatedEvent.class, name = EventType.CALENDAR_CREATED),
   @Type(value = CalendarUpdatedEvent.class, name = EventType.CALENDAR_UPDATED),
+  @Type(value = CalendarStartedEvent.class, name = EventType.CALENDAR_STARTED),
   @Type(value = CalendarUserDeclinedEvent.class, name = EventType.CALENDAR_USER_DECLINED),
   @Type(value = CalendarUserGoingEvent.class, name = EventType.CALENDAR_USER_GOING),
   @Type(value = CalendarUserUndecidedEvent.class, name = EventType.CALENDAR_USER_UNDECIDED),
