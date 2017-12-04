@@ -33,11 +33,17 @@ public enum EventType {
     CalendarUserUndecided,
     
     
+    @JsonProperty(EventType.GROUP_AVATAR_CHANGE)
+    GroupAvatarChanged,
+    
     @JsonProperty(EventType.GROUP_NAME_CHANGE)
     GroupNameChanged,
     
     @JsonProperty(EventType.GROUP_TOPIC_CHANGE)
     GroupTopicChanged,
+    
+    @JsonProperty(EventType.GROUP_TOPIC_REMOVED)
+    GroupTopicRemoved,
     
     @JsonProperty(EventType.GROUP_TYPE_CHANGE)
     GroupTypeChanged,
@@ -48,6 +54,9 @@ public enum EventType {
     
     @JsonProperty(EventType.MEMBER_ADDED_GROUP)
     MemberExitedGroup,
+    
+    @JsonProperty(EventType.MEMBER_REJOINED_GROUP)
+    MemberRejoinedGroup,
     
     @JsonProperty(EventType.MEMBER_REMOVED_GROUP)
     MemberRemovedGroup,
@@ -74,12 +83,15 @@ public enum EventType {
     public static final String CALENDAR_USER_GOING = "calendar.event.user.going";
     public static final String CALENDAR_USER_UNDECIDED = "calendar.event.user.undecided";
     
+    public static final String GROUP_AVATAR_CHANGE = "group.avatar_change";
     public static final String GROUP_NAME_CHANGE = "group.name_change";
     public static final String GROUP_TOPIC_CHANGE = "group.topic_change";
+    public static final String GROUP_TOPIC_REMOVED = "group.topic_removed";
     public static final String GROUP_TYPE_CHANGE = "group.type_change";
     
     public static final String MEMBER_ADDED_GROUP = "membership.announce.added";
-    public static final String MEMBER_EXITED_CHAT = "membership.notifications.exited";
+    public static final String MEMBER_EXITED_GROUP = "membership.notifications.exited";
+    public static final String MEMBER_REJOINED_GROUP = "membership.announce.rejoined";
     public static final String MEMBER_REMOVED_GROUP = "membership.notifications.removed";
     
     public final static String POLL_CREATED = "poll.created";

@@ -60,7 +60,7 @@ public class GroupMe4JClient {
     }
 
     public List<Group> getGroups(Integer page, Integer per_page) throws GroupMeAPIException {
-        Map<String, Object> queries = new HashMap<String, Object>();
+        Map<String, Object> queries = new HashMap<>();
         queries.put("token", token);
         queries.put("page", (page != null) ? page : 1);
         queries.put("per_page", (per_page != null) ? per_page : 10);
@@ -69,14 +69,14 @@ public class GroupMe4JClient {
     }
 
     public List<Group> getFormerGroups() throws GroupMeAPIException {
-        Map<String, Object> queries = new HashMap<String, Object>();
+        Map<String, Object> queries = new HashMap<>();
         queries.put("token", token);
 
         return Arrays.asList(get(Group[].class, WebEndpoints.GROUPS_FORMER, queries));
     }
 
     public Group getGroupById(String id) throws GroupMeAPIException {
-        Map<String, Object> queries = new HashMap<String, Object>();
+        Map<String, Object> queries = new HashMap<>();
         queries.put("token", token);
 
         return get(Group.class, String.format(WebEndpoints.GROUPS_SHOW, id), queries);
@@ -149,7 +149,7 @@ public class GroupMe4JClient {
     }
 
     public GroupMessages getMessagesForGroup(String id, Integer limit, String beforeId, String sinceId, String afterId) throws GroupMeAPIException {
-        Map<String, Object> queries = new HashMap<String, Object>();
+        Map<String, Object> queries = new HashMap<>();
         queries.put("limit", (limit != null) ? Math.min(limit, 100) : 20);
         queries.put("token", token);
 
@@ -204,7 +204,7 @@ public class GroupMe4JClient {
     }
 
     public List<Chat> getChats(Integer page, Integer per_page) throws GroupMeAPIException {        
-        Map<String, Object> queries = new HashMap<String, Object>();
+        Map<String, Object> queries = new HashMap<>();
         queries.put("token", token);
         queries.put("page", (page != null) ? page : 1);
         queries.put("per_page", (per_page != null) ? per_page : 10);
@@ -218,7 +218,7 @@ public class GroupMe4JClient {
     }
 
     public DirectMessages getDirectMessages(String otherUserId, String beforeId, String afterId) throws GroupMeAPIException {
-        Map<String, Object> queries = new HashMap<String, Object>();
+        Map<String, Object> queries = new HashMap<>();
         queries.put("token", token);
         queries.put("other_user_id", otherUserId);
 
@@ -272,7 +272,7 @@ public class GroupMe4JClient {
     
     // LEADERBOARD
     public List<GroupMessage> getGroupLikes(String groupId, String timePeriod) throws GroupMeAPIException {
-        Map<String, Object> queries = new HashMap<String, Object>();
+        Map<String, Object> queries = new HashMap<>();
         queries.put("period", timePeriod);
         queries.put("token", token);
         
@@ -280,14 +280,14 @@ public class GroupMe4JClient {
     }
     
     public List<GroupMessage> getMyGroupLikes(String groupId) throws GroupMeAPIException {
-        Map<String, Object> queries = new HashMap<String, Object>();
+        Map<String, Object> queries = new HashMap<>();
         queries.put("token", token);
         
         return get(GroupMessages.class, String.format(WebEndpoints.LEADERBOARD_MINE, groupId), queries).getMessages();
     }
     
     public List<GroupMessage> getMyGroupHits(String groupId) throws GroupMeAPIException {
-        Map<String, Object> queries = new HashMap<String, Object>();
+        Map<String, Object> queries = new HashMap<>();
         queries.put("token", token);
         
         return get(GroupMessages.class, String.format(WebEndpoints.LEADERBOARD_HITS, groupId), queries).getMessages();
@@ -343,7 +343,7 @@ public class GroupMe4JClient {
     }
     
     public List<Bot> getBots() throws GroupMeAPIException {
-        Map<String, Object> queries = new HashMap<String, Object>();
+        Map<String, Object> queries = new HashMap<>();
         queries.put("token", token);
         
         return Arrays.asList(get(Bot[].class, WebEndpoints.BOT_INDEX, queries));
@@ -357,7 +357,7 @@ public class GroupMe4JClient {
     }
     
     public boolean deleteBot(DestroyBotRequest request) {
-        RequestConverter<DestroyBotRequest> converter = new RequestConverter<DestroyBotRequest>();
+        RequestConverter<DestroyBotRequest> converter = new RequestConverter<>();
         String json = converter.parseObjectRequest(request);
         
         return post(WebEndpoints.BOT_DESTROY, json).isEmpty();
@@ -365,7 +365,7 @@ public class GroupMe4JClient {
     
     // USERS
     public User getMe() throws GroupMeAPIException {
-        Map<String, Object> queries = new HashMap<String, Object>();
+        Map<String, Object> queries = new HashMap<>();
         queries.put("token", token);
 
         return get(User.class, WebEndpoints.USER_ME, queries);
@@ -397,7 +397,7 @@ public class GroupMe4JClient {
         request.setDuration(duration);
         request.setRegistrationId(token);
 
-        RequestConverter<CreateSmsModeRequest> converter = new RequestConverter<CreateSmsModeRequest>();
+        RequestConverter<CreateSmsModeRequest> converter = new RequestConverter<>();
         String json = converter.parseObjectRequest(request);
 
         return post(WebEndpoints.SMS_MODE_CREATE, json).isEmpty();
@@ -411,7 +411,7 @@ public class GroupMe4JClient {
     public List<Block> getBlocks() throws GroupMeAPIException {
         User me = getMe();
         
-        Map<String, Object> queries = new HashMap<String, Object>();
+        Map<String, Object> queries = new HashMap<>();
         queries.put("user", me.getId());
         queries.put("token", token);
         
@@ -421,7 +421,7 @@ public class GroupMe4JClient {
     public BlockBetween getBlockBetween(String otherId) throws GroupMeAPIException {
         User me = getMe();
         
-        Map<String, Object> queries = new HashMap<String, Object>();
+        Map<String, Object> queries = new HashMap<>();
         queries.put("user", me.getId());
         queries.put("otherUser", otherId);
         queries.put("token", token);
@@ -435,7 +435,7 @@ public class GroupMe4JClient {
         LOGGER.debug("Connecting to url (GET): {}", url);
         String respJson = requestor.get(url, queries);
 
-        ResponseConverter<RESPONSE> responseConverter = new ResponseConverter<RESPONSE>(returnType);
+        ResponseConverter<RESPONSE> responseConverter = new ResponseConverter<>(returnType);
         GroupMeResponse<RESPONSE> response = responseConverter.parse(respJson.trim());
 
         if (response.getErrors() != null) {
@@ -448,11 +448,11 @@ public class GroupMe4JClient {
     }
 
     private <RESPONSE, REQUEST> RESPONSE post(Class<RESPONSE> returnType, String url, REQUEST body) throws GroupMeAPIException {
-        RequestConverter<REQUEST> rc = new RequestConverter<REQUEST>();
+        RequestConverter<REQUEST> rc = new RequestConverter<>();
         String reqJson = rc.parseObjectRequest(body);
 
         String respJson = post(url, reqJson.trim());
-        ResponseConverter<RESPONSE> responseConverter = new ResponseConverter<RESPONSE>(returnType);
+        ResponseConverter<RESPONSE> responseConverter = new ResponseConverter<>(returnType);
         GroupMeResponse<RESPONSE> response = responseConverter.parse(respJson.trim());
 
         if (response.getErrors() != null) {
@@ -465,7 +465,7 @@ public class GroupMe4JClient {
     }
 
     private String post(String url, String body) {
-        Map<String, Object> headers = new HashMap<String, Object>();
+        Map<String, Object> headers = new HashMap<>();
         headers.put("X-Access-Token", token);
 
         HttpRequestor requestor = HttpRequestorFactory.getDefaultRequestor();

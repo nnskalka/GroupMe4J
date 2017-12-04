@@ -11,7 +11,8 @@ import org.skalka.groupme4j.model.JacksonObject;
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME, 
   include = JsonTypeInfo.As.PROPERTY, 
-  property = "type")
+  property = "type",
+  defaultImpl = Event.class)
 @JsonSubTypes({
   @Type(value = CalendarCancelledEvent.class, name = EventType.CALENDAR_CANCELLED),
   @Type(value = CalendarCreatedEvent.class, name = EventType.CALENDAR_CREATED),
@@ -24,12 +25,15 @@ import org.skalka.groupme4j.model.JacksonObject;
   @Type(value = BotDeleteEvent.class, name = EventType.BOT_DELETED),
   @Type(value = BotAddEvent.class, name = EventType.BOT_ADDED),
   
+  @Type(value = GroupAvatarChangeEvent.class, name = EventType.GROUP_AVATAR_CHANGE),
   @Type(value = GroupNameChangeEvent.class, name = EventType.GROUP_NAME_CHANGE),
   @Type(value = GroupTopicChangeEvent.class, name = EventType.GROUP_TOPIC_CHANGE),
+  @Type(value = GroupTopicRemovedEvent.class, name = EventType.GROUP_TOPIC_REMOVED),
   @Type(value = GroupTypeChangeEvent.class, name = EventType.GROUP_TYPE_CHANGE),
   
   @Type(value = MemberAddedEvent.class, name = EventType.MEMBER_ADDED_GROUP),
-  @Type(value = MemberExitedEvent.class, name = EventType.MEMBER_EXITED_CHAT),
+  @Type(value = MemberExitedEvent.class, name = EventType.MEMBER_EXITED_GROUP),
+  @Type(value = MemberRejoinedEvent.class, name = EventType.MEMBER_REJOINED_GROUP),
   @Type(value = MemberRemovedEvent.class, name = EventType.MEMBER_REMOVED_GROUP),
   
   @Type(value = PollCreatedEvent.class, name = EventType.POLL_CREATED),
@@ -39,7 +43,7 @@ import org.skalka.groupme4j.model.JacksonObject;
 public class Event extends JacksonObject {
     
     @Getter @Setter
-    @JsonProperty("type")
+    @JsonProperty(value = "type", required = true)
     private String type;
 
 }

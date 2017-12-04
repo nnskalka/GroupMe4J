@@ -12,21 +12,21 @@ import org.skalka.groupme4j.model.user.EventUser;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class GroupTypeChangeEvent extends Event {
+public class GroupAvatarChangeEvent extends Event {
     
     @JsonProperty("data")
-    private GroupTypeChangeEventData data;
+    private GroupAvatarChangeEventData data;
     
     @Data
     @NoArgsConstructor
     @EqualsAndHashCode(callSuper = true)
-    public class GroupTypeChangeEventData extends JacksonObject {
+    public class GroupAvatarChangeEventData extends JacksonObject {
+        
+        @JsonProperty("avatar_url")
+        private String avatarUrl;
         
         @JsonProperty("user")
         private EventUser user;
-        
-        @JsonProperty("type")
-        private String type;
         
     }
     

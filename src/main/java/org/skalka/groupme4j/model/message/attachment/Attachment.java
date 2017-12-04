@@ -13,8 +13,10 @@ import org.skalka.groupme4j.model.JacksonObject;
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
     include = JsonTypeInfo.As.PROPERTY,
-    property = "type")
+    property = "type",
+    defaultImpl=Attachment.class)
 @JsonSubTypes({
+    @Type(value = AutokickedAttachment.class, name = AttachmentType.AUTOKICKED_TYPE),
     @Type(value = EmojiAttachment.class, name = AttachmentType.EMOJI_TYPE),
     @Type(value = EventAttachment.class, name = AttachmentType.EVENT_TYPE),
     @Type(value = FileAttachment.class, name = AttachmentType.FILE_TYPE),
@@ -27,7 +29,7 @@ import org.skalka.groupme4j.model.JacksonObject;
     @Type(value = SplitAttachment.class, name = AttachmentType.SPLIT_TYPE),
     @Type(value = VideoAttachment.class, name = AttachmentType.VIDEO_TYPE)
 })
-public abstract class Attachment extends JacksonObject {
+public class Attachment extends JacksonObject {
 
     @Getter @Setter
     @JsonProperty(value = "type", required = true)
