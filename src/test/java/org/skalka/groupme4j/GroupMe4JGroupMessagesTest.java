@@ -17,59 +17,59 @@ import org.skalka.groupme4j.model.message.attachment.Attachment;
 import org.skalka.groupme4j.model.message.attachment.LocationAttachment;
 
 public class GroupMe4JGroupMessagesTest extends GroupMe4JClientTest {
+  
+  @Test
+  public void testGetMessageForGroup() throws GroupMeException {
+    final int groupCount = 15;
+
+    // Getting a group chat that was not just created
+    List<Group> groups = groupme.getGroups(1, groupCount);
     
-    @Test
-    public void testGetMessageForGroup() throws GroupMeException {
-        final int NUMBER_OF_GROUPS = 15;
-
-        // Getting a group chat that was not just created
-        List<Group> groups = groupme.getGroups(1, NUMBER_OF_GROUPS);
-        
-        Assert.assertNotNull(groups);
-        Assert.assertEquals(NUMBER_OF_GROUPS, groups.size());
-        
-        for (int i = 1; i < groups.size(); i++) {
-            Group group = groups.get(i);
-            
-            Assert.assertNotNull(group);
-            Assert.assertNotNull(group.getGroupId());
-            
-            GroupMessages messages = groupme.getMessagesForGroup(group.getGroupId(), 50);
-
-            Assert.assertNotNull(messages);
-            Assert.assertNotNull(messages.getCount());
-            Assert.assertNotEquals(0, messages.getMessages().size());
-
-            Assert.assertNotNull(messages.getMessages());
-
-            GroupMessage message = messages.getMessages().get(0);
-            Assert.assertNotNull(message.getId());
-        }
-    }
-
-    @Test
-    public void testPostGroupMessage_NoAttachments() throws GroupMeException {
-        GroupMessage message = groupme.postMessage(cGroup.getGroupId(), "Hello World");
-        
-        Assert.assertNotNull(message);
-        Assert.assertNotNull(message.getText());
-        Assert.assertEquals("Hello World", message.getText());
-    }
+    Assert.assertNotNull(groups);
+    Assert.assertEquals(groupCount, groups.size());
     
-    @Test
-    public void testPostGroupMessage_LocationAttachment() throws GroupMeException {
-        List<Attachment> attachments = new LinkedList<Attachment>();
-        attachments.add(new LocationAttachment() {{
-            setLatitude("0.0");
-            setLongitude("0.0");
-            setName("TEST");
-        }}); 
+    for (int i = 1; i < groups.size(); i++) {
+      Group group = groups.get(i);
+      
+      Assert.assertNotNull(group);
+      Assert.assertNotNull(group.getGroupId());
+      
+      GroupMessages messages = groupme.getMessagesForGroup(group.getGroupId(), 50);
 
-        GroupMessage message = groupme.postMessage(cGroup.getGroupId(), attachments);
-        
-        Assert.assertNotNull(message);
-        Assert.assertNotNull(message.getAttachments());
-        Assert.assertEquals(1, message.getAttachments().size());
+      Assert.assertNotNull(messages);
+      Assert.assertNotNull(messages.getCount());
+      Assert.assertNotEquals(0, messages.getMessages().size());
+
+      Assert.assertNotNull(messages.getMessages());
+
+      GroupMessage message = messages.getMessages().get(0);
+      Assert.assertNotNull(message.getId());
     }
+  }
+
+  @Test
+  public void testPostGroupMessage_NoAttachments() throws GroupMeException {
+    GroupMessage message = groupme.postMessage(createdGroup.getGroupId(), "Hello World");
     
+    Assert.assertNotNull(message);
+    Assert.assertNotNull(message.getText());
+    Assert.assertEquals("Hello World", message.getText());
+  }
+  
+  @Test
+  public void testPostGroupMessage_LocationAttachment() throws GroupMeException {
+    List<Attachment> attachments = new LinkedList<Attachment>();
+    attachments.add(new LocationAttachment() {{
+        setLatitude("0.0");
+        setLongitude("0.0");
+        setName("TEST");
+      }
+    }); 
+
+    GroupMessage message = groupme.postMessage(createdGroup.getGroupId(), attachments);
+    
+    Assert.assertNotNull(message);
+    Assert.assertNotNull(message.getAttachments());
+    Assert.assertEquals(1, message.getAttachments().size());
+  }
 }

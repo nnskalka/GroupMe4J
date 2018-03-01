@@ -1,6 +1,12 @@
 package org.skalka.groupme4j;
 
 import com.google.common.reflect.ClassPath;
+
+import java.io.IOException;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.List;
+
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -9,29 +15,25 @@ import javassist.CtMethod;
 import javassist.CtNewConstructor;
 import javassist.CtNewMethod;
 import javassist.NotFoundException;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
+
 import org.skalka.groupme4j.model.message.attachment.AttachmentType;
 import org.skalka.groupme4j.model.message.event.EventType;
-
-import java.io.IOException;
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.management.AttributeChangeNotification;
-
 public class ModelTest {
 
   private static final String MODEL_PACKAGE = "org.skalka.groupme4j.model";
   private static final List<Class<?>> ignoredClasses = Arrays.asList(new Class<?>[] { 
-    AttachmentType.class,
-    EventType.class
+      AttachmentType.class,
+      EventType.class
   });
 
   private BeanTester beanTester;

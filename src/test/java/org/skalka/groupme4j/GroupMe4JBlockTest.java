@@ -9,16 +9,16 @@ import org.skalka.groupme4j.model.block.BlockBetween;
 
 public class GroupMe4JBlockTest extends GroupMe4JClientTest {
 
-    @Test
-    public void testBlocking() throws GroupMeException {
-        List<Block> blocks = groupme.getBlocks();
-        
-        Assert.assertNotNull(blocks);
-        Assert.assertNotEquals(0, blocks.size());
-        
-        BlockBetween block = groupme.getBlockBetween(blocks.get(0).getBlockedUserId());
-        
-        Assert.assertTrue(block.getBetween());
-    }
+  @Test
+  public void testBlocking() throws GroupMeException {
+    List<Block> blocks = groupme.getBlocks();
     
+    Assert.assertNotNull(blocks);
+    Assert.assertNotEquals(0, blocks.size());
+    
+    BlockBetween block = groupme.getBlockBetween(blocks.get(0).getBlockedUserId());
+    
+    Assert.assertTrue(block.getBetween());
+  }
+  
 }
